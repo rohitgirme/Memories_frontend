@@ -1,0 +1,23 @@
+{
+  "name": "Memories",
+  "version": "0.0.1",
+  "description": "Write your memories",
+  "author": "Rohit Girme",
+  "dependencies": {
+    "underscore": "latest",
+    "jquery": "latest",
+    "backbone": "latest",
+    "requirejs": "latest",
+    "react": "latest"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "eslint": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rohitgirme/Memories_frontend"
+  },
+  "private": true,
+  "license": "MIT"
+}
