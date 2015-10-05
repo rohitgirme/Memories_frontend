@@ -4,12 +4,14 @@
 require.config({
   baseUrl: 'js',
   paths: {
-    jquery    : '../node_modules/jquery/dist/jquery.min',
-    underscore: '../node_modules/underscore/underscore-min',
-    backbone  : '../node_modules/backbone/backbone-min',
+    templates : '../templates',
+
+    jquery    : '../node_modules/jquery/dist/jquery',
+    underscore: '../node_modules/underscore/underscore',
+    backbone  : '../node_modules/backbone/backbone',
     text      : '../node_modules/requirejs/text',
 
-    react     : '../node_modules/react/dist/react.min',
+    react     : '../node_modules/react/dist/react',
     JSXTransformer: '../node_modules/react/dist/JSXTransformer',
     jsx       : '../node_modules/react/dist/jsx'
   },

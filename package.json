@@ -4,15 +4,17 @@
   "description": "Write your memories",
   "author": "Rohit Girme",
   "dependencies": {
-    "underscore": "latest",
-    "jquery": "latest",
-    "backbone": "latest",
-    "requirejs": "latest",
-    "react": "latest"
+    "underscore": "^1.x.x",
+    "jquery": "^2.x.x",
+    "backbone": "^1.x.x",
+    "requirejs": "^2.x.x",
+    "react": "^0.x.x",
+    "bootstrap": "^3.x.x",
+    "spinkit": "^1.x.x"
   },
   "devDependencies": {
-    "grunt": "latest",
-    "eslint": "latest"
+    "grunt": "^0.x.x",
+    "eslint": "^1.x.x"
   },
   "repository": {
     "type": "git",

@@ -10,9 +10,19 @@ require([
   require([
     'jquery',
     'backbone',
-    'react'
-  ], function ($) {
-    console.log($('#container'));
+    'views/ApplicationView',
+    'ApplicationRouter'
+  ], function ($, Backbone, AppView, AppRouter) {
+
+    'use strict';
+
+    var appView = new AppView();
+    appView.start();
+
+    var appRouter = new AppRouter({
+      appView: appView
+    });
+    appRouter.start();
   });
 
 });
