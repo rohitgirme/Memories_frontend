@@ -6,6 +6,7 @@ define([
 ], function (React) {
 
   return React.createClass({
+    displayName: 'HeaderView',
     
     render: function () {
       return (

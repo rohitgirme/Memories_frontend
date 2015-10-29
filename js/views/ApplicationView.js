@@ -2,13 +2,13 @@
  * Created by rohitgirme on 10/4/15.
  */
 define([
+  'react',
   'views/core/BaseView',
-  'utils/Constants',
-  'jsx!views/MainView'
+  'utils/Constants'
 ], function (
+  React,
   BaseView,
-  Constants,
-  MainView) {
+  Constants) {
 
   return BaseView.extend({
 
@@ -36,7 +36,7 @@ define([
       } else {
         switch (viewId) {
           case Constants.MAIN_VIEW:
-            this.loadView('jsx!views/MainView', Constants.MAIN_VIEW);
+            this.loadView('jsx!components/RMainView', Constants.MAIN_VIEW);
             break;
         }
       }
@@ -45,16 +45,8 @@ define([
     loadView: function (ViewClassModule, identifier) {
       var _this = this;
       require([ViewClassModule], function (ViewClass) {
-        var instance = new ViewClass();
-        _this.register(instance, identifier);
-
-        instance.render();
-        $('.app-container').append(instance.el.children);
+        React.render(<ViewClass></ViewClass>, _this.$el[0]);
       });
-    },
-
-    register: function (view, identifier) {
-      this.views[identifier] = view;
     }
   });
 });

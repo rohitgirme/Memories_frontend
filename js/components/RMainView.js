@@ -3,18 +3,33 @@
  */
 define([
   'react',
-  'jsx!components/RHeaderView'
+  'models/MemoriesCollection',
+  'jsx!components/RHeaderView',
+  'jsx!components/RListView'
 ], function (
   React,
-  RHeaderView) {
+  MemoriesCollection,
+  RHeaderView,
+  RListView) {
 
   return React.createClass({
+    displayName: 'MainView',
+
+    componentWillMount: function () {
+      this.memories = new MemoriesCollection();
+    },
+
+    componentDidMount: function () {
+      this.memories.getTopMemories(5, {
+        reset: true
+      });
+    },
 
     render: function () {
       return (
         <div className="app-main-view">
           <RHeaderView />
-          <div className="app-lists-container" />
+          <RListView model={this.memories} />
 
           <footer className="app-footer">
             <div className="app-create-new" />

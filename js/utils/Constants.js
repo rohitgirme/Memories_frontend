@@ -7,7 +7,14 @@ define([
 
   return {
 
-    MAIN_VIEW: 'main_view'
+    MAIN_VIEW: 'main_view',
+
+    TITLE   : 'title',
+    CONTENT : 'content',
+    PHOTOS  : 'photos',
+    LOCATION:'location',
+    TAGS    : 'tags',
+    DATE    : 'date'
 
   }
 

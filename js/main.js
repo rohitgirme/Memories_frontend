@@ -10,13 +10,15 @@ require([
   require([
     'jquery',
     'backbone',
-    'views/ApplicationView',
+    'jsx!views/ApplicationView',
     'ApplicationRouter'
   ], function ($, Backbone, AppView, AppRouter) {
 
     'use strict';
 
-    var appView = new AppView();
+    var appView = new AppView({
+      el: $('.app-container')
+    });
     appView.start();
 
     var appRouter = new AppRouter({

@@ -10,7 +10,9 @@ define([
   return Backbone.Router.extend({
 
     routes: {
-      "": "displayMainView"
+      ''            : 'displayMainView',
+      'memories'    : 'displayMainView',
+      'memories/new': ''
     },
 
     initialize: function (options) {
@@ -21,7 +23,7 @@ define([
       Backbone.history.start({
         pushState: true
       });
-      this.navigate('', true);
+      this.navigate('memories', true);
     },
 
     displayMainView: function () {

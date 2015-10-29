@@ -14,7 +14,9 @@
   },
   "devDependencies": {
     "grunt": "^0.x.x",
-    "eslint": "^1.x.x"
+    "eslint": "^1.x.x",
+    "express": "^4.x.x",
+    "less-middleware": "^2.x.x"
   },
   "repository": {
     "type": "git",
