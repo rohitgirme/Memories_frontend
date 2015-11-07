@@ -11,8 +11,9 @@ define([
     displayName: 'ListItem',
 
     render: function () {
+      // TODO: trim the content to few lines
       return (
-        <div className="list-item row">
+        <div onClick={this.props.onClick} data-id={this.props.id} className="list-item row">
           <div className="item-text col-xs-10">
             <div className="item-header row">
               <div className="item-title col-xs-8">

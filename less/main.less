@@ -1,0 +1,104 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#app-container {
+  height: 100%;
+  width: 100%;
+
+  .app-view {
+    height: 100%;
+    width: 100%;
+
+    .main-view {
+      transition: transform 0.7s ease-in;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      background-color: #9cb3a8;
+      transform: translateZ(0);
+
+      .app-create-new {
+        float: right;
+        cursor: pointer;
+      }
+    }
+
+    .memory-view {
+      visibility: hidden;
+      transition: transform 0.7s ease-in, visibility 0.7s ease-in;
+      transform: translateX(-100%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      height: 100%;
+      width: 100%;
+      background-color: #243040;
+      color: red;
+
+      &.edit-mode {
+        .edit {
+          display: initial;
+        }
+        .display {
+          display: none;
+        }
+      }
+
+      &.display-mode {
+        .edit {
+          display: none;
+        }
+        .display {
+          display: initial;
+        }
+      }
+
+      .round-shape {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background-color: #009998;
+      }
+
+      .edit-icon-container {
+        text-align: center;
+        float: right;
+        cursor: pointer;
+        .edit-icon {
+          vertical-align: middle;
+        }
+      }
+
+      .close-icon {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        color: red;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+#app-container.is-visible {
+  .main-view {
+    transform: translateX(100%);
+  }
+
+  .memory-view {
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
+.container-fluid {
+  padding: 0;
+
+  .row {
+    margin: 0;
+  }
+}

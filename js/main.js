@@ -17,7 +17,7 @@ require([
     'use strict';
 
     var appView = new AppView({
-      el: $('.app-container')
+      el: $('#app-container')
     });
     appView.start();
 

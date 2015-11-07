@@ -29,5 +29,5 @@ app.get('/memories', function (req, res) {
 
 
 app.listen(3000, function () {
-  console.log('App Started: ', fileRoot);
+  console.log('App Started on 3000: ', fileRoot);
 });

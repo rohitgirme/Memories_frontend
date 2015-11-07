@@ -21,6 +21,7 @@ define([
     },
 
     render: function () {
+      var _this = this;
       var items = this.props.model.map(function (item) {
         return (
           <RListItem
@@ -28,17 +29,25 @@ define([
             date={item.get(Constants.DATE)}
             content={item.get(Constants.CONTENT)}
             image={item.get(Constants.PHOTOS)}
+            key={item.get(item.idAttribute)}
+            id={item.get(item.idAttribute)}
           >
           </RListItem>
         );
       });
 
       return (
-        <div className="list-container">
+        <div className="list-container" onClick={_this.onMemoryClick}>
           {items}
         </div>
       );
+    },
+
+    onMemoryClick: function (evt) {
+      var memory = $(evt.target).parents('[data-id]');
+      this.props.onClick(evt, memory.attr('data-id'));
     }
+
 
   });
 
