@@ -4,11 +4,13 @@
 define([
   'react',
   'models/MemoryModel',
-  'utils/Constants'
+  'utils/Constants',
+  'jsx!templates/MemoryViewTemplate'
 ], function (
   React,
   MemoryModel,
-  Constants) {
+  Constants,
+  MemoryViewTemplate) {
 
   'use strict';
 
@@ -17,79 +19,70 @@ define([
 
     getInitialState: function () {
       return {
-        editMode: false
+        editMode : false,
+        showPanel: false
       };
     },
 
-    render: function () {
-      if (this.props.model &&
-        this.props.model instanceof MemoryModel) {
-        var title = this.props.model.get(Constants.TITLE),
-            content = this.props.model.get(Constants.CONTENT);
-
-        return (
-          <div className= {this.state.editMode ? "memory-view edit-mode" : "memory-view display-mode"}>
-            <header className="title">
-              <span className="display">{title}</span>
-              <input className="edit" value={title} />
-            </header>
-            <span onClick={this.updateModel} className="close-icon glyphicon glyphicon-remove" aria-hidden="true">
-            </span>
-            <div className="content">
-              <span className="display">
-                {content}
-              </span>
-              <textarea className="edit">
-                {content}
-              </textarea>
-            </div>
-            <div className="photos"></div>
-            <div className="actions"></div>
-            <div className="edit-icon-container round-shape" onClick={this.editSaveMemory}>
-              <span className="display edit-icon glyphicon glyphicon-pencil" aria-hidden="true">
-              </span>
-              <span className="edit edit-icon glyphicon glyphicon-save" aria-hidden="true">
-              </span>
-            </div>
-            <div>
-            </div>
-          </div>
-        );
-      } else {
-        return (
-          <div className="memory-view">
-            <header className="title-container">
-              <input className="title" placeholder="Title..."/>
-            </header>
-            <span onClick={this.updateModel} className="close-icon glyphicon glyphicon-remove" aria-hidden="true">
-            </span>
-            <div className="content-container">
-              <textarea className="content" placeholder="Once upon a time..."/>
-            </div>
-            <div className="photos"></div>
-            <div className="actions"></div>
-          </div>
-        );
+    componentWillMount: function () {
+      if (!this.props.model) {
+        this.setState({
+          editMode: true
+        });
       }
+    },
+
+    render: function () {
+      var model = this.props.model,
+          closeCallback;
+
+      if (!model) {
+        model = new MemoryModel();
+      }
+      closeCallback = _.bind(this.updateModel, this, model);
+
+      var title = model.get(Constants.TITLE) || Constants.UNTITLED_TITLE(),
+          content = model.get(Constants.CONTENT);
+
+      return MemoryViewTemplate.template({
+        editMode: this.state.editMode,
+        title   : title,
+        content : content,
+        closeCallback   : closeCallback,
+        editSaveCallback: this.editSaveMemory,
+        openPanelCallback: this.openPanelCallback,
+        closePanelCallback: this.closePanelCallback,
+        showPanel: this.state.showPanel
+      });
 
     },
 
-    editSaveMemory: function (evt) {
+    editSaveMemory: function () {
       this.setState({
         editMode: !this.state.editMode
       });
     },
 
-    updateModel: function (evt) {
+    openPanelCallback: function () {
+      this.setState({
+        showPanel: true
+      });
+    },
+
+    closePanelCallback: function () {
+      this.setState({
+        showPanel: false
+      });
+    },
+
+    updateModel: function (model, evt) {
       var domNode = $(this.getDOMNode()),
-          title = domNode.find('.title'),
-          content = domNode.find('.content'),
-          model,
+          title = domNode.find('.title:visible'),
+          content = domNode.find('.content:visible'),
           _this = this;
 
-      model = this.props.model || new MemoryModel();
-      model.set(Constants.TITLE, title.val());
-      model.set(Constants.CONTENT, content.val());
+      model.set(Constants.TITLE, title.val() || title.text());
+      model.set(Constants.CONTENT, content.val() || content.text());
 
       $('#app-container').toggleClass('is-visible');
       domNode.on('transitionend', function () {
@@ -103,7 +96,7 @@ define([
         if (_this.props.open) {
           $('#app-container').toggleClass('is-visible');
         }
-      }, 50);
+      }, 5);
     }
 
   });
