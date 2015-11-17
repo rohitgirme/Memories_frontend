@@ -8,12 +8,82 @@ html, body {
   height: 100%;
   width: 100%;
 
+  .welcome-view {
+    background: #26004d;
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .centering-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -120px 0 0 -125px
+    }
+
+    .app-icon {
+      position: relative;
+    }
+
+    .loader {
+      margin: 0;
+      position: absolute;
+      top: 200px;
+      left: 95px;
+
+      .rect {
+        background-color: #e8f7f0;
+      }
+    }
+
+    .right_1,
+    .right_2,
+    .left_1,
+    .left_2 {
+      border-radius: 50px;
+      position: absolute;
+    }
+
+    .left_1,
+    .left_2 {
+      width: 50px;
+      height: 200px;
+      background: #00545c;
+      transform: rotate(-25deg);
+    }
+
+    .left_1 {
+      left: 64px;
+    }
+
+    .left_2 {
+      left: 190px;
+    }
+
+    .right_1,
+    .right_2 {
+      position: absolute;
+      width: 50px;
+      height: 200px;
+      transform: rotate(25deg);
+      background: #f5fffa;
+      top: 1px;
+    }
+
+    .right_2 {
+      left: 127px;
+    }
+    .right_1 {
+      left: 0;
+    }
+  }
+
   .app-view {
     height: 100%;
     width: 100%;
 
     .main-view {
-      transition: transform 0.7s ease-in;
+      transition: transform 0.3s ease-in;
       z-index: 2;
       height: 100%;
       width: 100%;
@@ -24,11 +94,12 @@ html, body {
         float: right;
         cursor: pointer;
       }
+
     }
 
     .memory-view-container {
       visibility: hidden;
-      transition: transform 0.7s ease-in, visibility 0.7s ease-in;
+      transition: transform 0.3s ease-in, visibility 0.3s ease-in;
       transform: translateX(-100%);
       position: fixed;
       top: 0;
@@ -101,7 +172,7 @@ html, body {
         right: 0;
         bottom: 0;
         width: 50px;
-        transition: all 0.5s ease-in;
+        transition: all 0.2s ease-in;
 
         .panel-content {
           clear: both;

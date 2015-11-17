@@ -7,14 +7,16 @@ define([
   'jsx!components/RHeaderView',
   'jsx!components/RListView',
   'jsx!components/RFooterView',
-  'jsx!components/RMemoryView'
+  'jsx!components/RMemoryView',
+  'jsx!components/WelcomeScreenView'
 ], function (
   React,
   MemoriesCollection,
   RHeaderView,
   RListView,
   RFooterView,
-  RMemoryView) {
+  RMemoryView,
+  WelcomeScreenView) {
 
   'use strict';
 
@@ -96,6 +98,17 @@ define([
       this.memories.add(dirtyModel, options);
       dirtyModel.save();
 
+      this.setState({
+        memoryView: false,
+        memoryId  : null
+      });
+    },
+
+    onDelete: function () {
+      if (!this.state.memoryView) {
+        return;
+      }
+      this.memories.remove(this.state.memoryId);
       this.setState({
         memoryView: false,
         memoryId  : null

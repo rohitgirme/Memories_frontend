@@ -57,7 +57,7 @@ define([
           </div>
           <span onClick={data.openPanelCallback} className={panelOpenerClasses} aria-hidden="true">
           </span>
-          <PanelView show={data.showPanel} closeCallback={data.closePanelCallback}></PanelView>
+          <PanelView show={data.showPanel} closeCallback={data.closePanelCallback} deleteCallback={data.deleteCallback}></PanelView>
         </div>
       );
     }

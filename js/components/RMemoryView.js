@@ -52,7 +52,8 @@ define([
         editSaveCallback: this.editSaveMemory,
         openPanelCallback: this.openPanelCallback,
         closePanelCallback: this.closePanelCallback,
-        showPanel: this.state.showPanel
+        showPanel: this.state.showPanel,
+        deleteCallback: this.deleteMemory
       });
 
     },
@@ -84,9 +85,27 @@ define([
       model.set(Constants.TITLE, title.val() || title.text());
       model.set(Constants.CONTENT, content.val() || content.text());
 
-      $('#app-container').toggleClass('is-visible');
       domNode.on('transitionend', function () {
-        _this.props.onClose(evt, model);
+        if (evt.originalEvent.propertyName === 'transform') {
+          evt.stopPropagation();
+          domNode.off();
+          _this.props.onClose(evt, model);
+        }
+      });
+      $('#app-container').removeClass('is-visible');
+    },
+
+    deleteMemory: function () {
+      var domNode = $(this.getDOMNode()),
+          _this = this;
+
+      $('#app-container').removeClass('is-visible');
+      domNode.on('transitionend', function (evt) {
+        if (evt.originalEvent.propertyName === 'transform') {
+          evt.stopPropagation();
+          domNode.off();
+          _this.props.onDelete();
+        }
       });
     },
 
@@ -94,7 +113,7 @@ define([
       var _this = this;
       setTimeout(function () {
         if (_this.props.open) {
-          $('#app-container').toggleClass('is-visible');
+          $('#app-container').addClass('is-visible');
         }
       }, 5);
     }

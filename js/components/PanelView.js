@@ -24,11 +24,11 @@ define([
           </span>
           <div className='panel-content'>
             <ul>
-              <li className="photo-icon">
+              <li onClick={this.onAddPhoto} className="photo-icon">
                 <span className="glyphicon glyphicon-camera" aria-hidden="true">
                 </span>
               </li>
-              <li className="delete-icon">
+              <li onClick={this.onDelete} className="delete-icon">
                 <span className="glyphicon glyphicon-trash" aria-hidden="true">
                 </span>
               </li>
@@ -36,6 +36,24 @@ define([
           </div>
         </div>
       );
+    },
+
+    onDelete: function () {
+      var domNode = $(this.getDOMNode()),
+          _this = this;
+
+      domNode.on('transitionend', function (evt) {
+        if (evt.originalEvent.propertyName === 'transform') {
+          evt.stopPropagation();
+          domNode.off();
+          _this.props.deleteCallback();
+        }
+      });
+      this.props.closeCallback();
+    },
+
+    onAddPhoto: function (evt) {
+
     }
   });
 
