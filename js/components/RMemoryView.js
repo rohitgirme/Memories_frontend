@@ -85,7 +85,7 @@ define([
       model.set(Constants.TITLE, title.val() || title.text());
       model.set(Constants.CONTENT, content.val() || content.text());
 
-      domNode.on('transitionend', function () {
+      domNode.on('transitionend', function (evt) {
         if (evt.originalEvent.propertyName === 'transform') {
           evt.stopPropagation();
           domNode.off();

@@ -8,11 +8,20 @@ html, body {
   height: 100%;
   width: 100%;
 
+  .app-view.slideUp {
+    .welcome-view {
+      transform: translateY(-100%);
+    }
+  }
+
   .welcome-view {
     background: #26004d;
     height: 100%;
     width: 100%;
-    position: relative;
+    position: absolute;
+    transition: transform 0.3s ease-in;
+    transform: translateY(0);
+    z-index: 5;
 
     .centering-wrapper {
       position: absolute;
@@ -87,6 +96,7 @@ html, body {
       z-index: 2;
       height: 100%;
       width: 100%;
+      position: absolute;
       background-color: #9cb3a8;
       transform: translateZ(0);
 
