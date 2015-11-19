@@ -20,7 +20,8 @@ define([
     getInitialState: function () {
       return {
         editMode : false,
-        showPanel: false
+        showPanel: false,
+        tags     : []
       };
     },
 
@@ -28,6 +29,10 @@ define([
       if (!this.props.model) {
         this.setState({
           editMode: true
+        });
+      } else {
+        this.setState({
+          tags: this.props.model.get(Constants.TAGS)
         });
       }
     },
@@ -48,14 +53,30 @@ define([
         editMode: this.state.editMode,
         title   : title,
         content : content,
+        tags    : this.state.tags,
         closeCallback   : closeCallback,
         editSaveCallback: this.editSaveMemory,
         openPanelCallback: this.openPanelCallback,
         closePanelCallback: this.closePanelCallback,
         showPanel: this.state.showPanel,
-        deleteCallback: this.deleteMemory
+        deleteCallback: this.deleteMemory,
+        createTag: this.createTag
       });
 
+    },
+
+    createTag: function (evt) {
+      var target = $(evt.target);
+
+      if (evt.which === 13) {
+        var tag = target.val(),
+            tags = this.state.tags;
+
+        tags.push(tag);
+        this.setState({
+          tags: tags
+        });
+      }
     },
 
     editSaveMemory: function () {
@@ -76,20 +97,25 @@ define([
       });
     },
 
-    updateModel: function (model, evt) {
+    updateModel: function (model, e) {
       var domNode = $(this.getDOMNode()),
           title = domNode.find('.title:visible'),
           content = domNode.find('.content:visible'),
-          _this = this;
+          tagContainer = domNode.find('.tags-container'),
+          tags, _this = this;
 
+      tags = _.map(tagContainer.children(':not(:last-child)'), function (tag) {
+        return $(tag).text();
+      });
       model.set(Constants.TITLE, title.val() || title.text());
       model.set(Constants.CONTENT, content.val() || content.text());
+      model.set(Constants.TAGS, tags);
 
       domNode.on('transitionend', function (evt) {
         if (evt.originalEvent.propertyName === 'transform') {
           evt.stopPropagation();
           domNode.off();
-          _this.props.onClose(evt, model);
+          _this.props.onClose(e, model);
         }
       });
       $('#app-container').removeClass('is-visible');

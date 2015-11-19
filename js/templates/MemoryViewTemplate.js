@@ -26,6 +26,14 @@ define([
         'hide'  : data.showPanel
       });
 
+      var tags = _.map(data.tags, function (tag) {
+        return (<div className="tag">{tag}</div>);
+      });
+      tags.push((
+        <div className="tag">
+          <input placeholder="tag" />
+        </div>));
+
       return (
         <div className="memory-view-container">
           <div className= {containerClasses}>
@@ -52,7 +60,8 @@ define([
               <span className="edit edit-icon glyphicon glyphicon-save" aria-hidden="true">
               </span>
             </div>
-            <div>
+            <div className="tags-container" onKeyPress={data.createTag}>
+              {tags}
             </div>
           </div>
           <span onClick={data.openPanelCallback} className={panelOpenerClasses} aria-hidden="true">

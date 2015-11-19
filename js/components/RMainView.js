@@ -102,6 +102,8 @@ define([
     },
 
     createNew: function () {
+      var domNode = $(this.getDOMNode());
+      domNode.find('input').attr('tabindex', -1);
       this.setState({
         mode      : 'memory',
         memoryId  : null
@@ -109,6 +111,8 @@ define([
     },
 
     onMemoryClick: function (evt, memoryId) {
+      var domNode = $(this.getDOMNode());
+      domNode.find('input').attr('tabindex', -1);
       this.setState({
         mode      : 'memory',
         memoryId  : memoryId
@@ -119,7 +123,9 @@ define([
       if (this.state.mode !== 'memory') {
         return;
       }
-      var options = {};
+      var options = {},
+          domNode = $(this.getDOMNode());
+      domNode.find('input').attr('tabindex', 1);
 
       if (this.state.memoryId) {
         _.extend(options, {

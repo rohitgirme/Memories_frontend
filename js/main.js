@@ -10,9 +10,15 @@ require([
   require([
     'jquery',
     'backbone',
+    'underscore',
     'jsx!views/ApplicationView',
     'ApplicationRouter'
-  ], function ($, Backbone, AppView, AppRouter) {
+  ], function (
+    $,
+    _,
+    Backbone,
+    AppView,
+    AppRouter) {
 
     'use strict';
 

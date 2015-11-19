@@ -173,6 +173,26 @@ html, body {
           cursor: pointer;
         }
 
+        .tags-container {
+          .tag {
+            border: 1px solid #ffffff;
+            box-shadow: inset -2px 2px 2px 0 #44A4C4,
+                        inset 2px -2px 2px 0 #44A4C4;
+            margin: 0 5px;
+            padding: 2px 3px;
+            border-radius: 5px;
+            display: inline-block;
+
+            input {
+              background: transparent;
+              border: none;
+              &:focus {
+                outline: none;
+              }
+            }
+          }
+        }
+
       }
 
       .panel-view {
