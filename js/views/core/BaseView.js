@@ -2,41 +2,68 @@
  * Created by rohitgirme on 10/4/15.
  */
 define([
-  'backbone'
-], function (Backbone) {
+  'backbone',
+  'utils/AppUtil'
+], function (
+  Backbone,
+  AppUtil) {
 
   var BaseView = Backbone.View.extend({
 
-    show: function () {
-      this.$el.show();
+    whitespaceRegex: /\s+/,
+
+    show: function (remove) {
+      if (remove) {
+        this.$el.show();
+        return;
+      }
+
+      this.$el.addClass('is-visible');
     },
 
-    hide: function () {
-      this.$el.hide();
+    hide: function (remove) {
+      if (remove) {
+        this.$el.hide();
+        return;
+      }
+
+      this.$el.removeClass('is-visible');
     },
 
     destroy: function () {
       this.undelegateEvents();
       this.undelegateModelEvents();
 
-      this.$el.empty();
+      this.$el.remove();
     },
 
     delegateModelEvents: function () {
       if (!this.model) {
-        throw new Error('No "model" property found!');
+        AppUtil.warn('No "model" property found!');
+        return;
       }
-      var eventsHash = this.modelEvents || {};
+      var eventsHash = this.modelEvents || {},
+          _this = this;
       _.each(eventsHash, function (value, key) {
-        this.model.on(key, this[value], this);
+        var keys = key.split(_this.whitespaceRegex);
+        (this[keys[0]]).on(keys[1], this[value], this);
       }, this);
     },
 
     undelegateModelEvents: function () {
       if (!this.model) {
-        throw new Error('No "model" property found!');
+        AppUtil.warn('No "model" property found!');
+        return;
       }
       this.model.off();
+    },
+
+    startServices: function () {
+
+    },
+
+    stopServices: function () {
+
     }
 
   });

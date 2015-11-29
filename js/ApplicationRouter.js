@@ -27,7 +27,7 @@ define([
     },
 
     displayMainView: function () {
-      this.appView.showView(Constants.MAIN_VIEW);
+      this.appView.displayView(Constants.MAIN_VIEW);
     }
 
   });

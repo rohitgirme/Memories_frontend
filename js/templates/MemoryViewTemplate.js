@@ -34,8 +34,21 @@ define([
           <input placeholder="tag" />
         </div>));
 
+      //var touchstart = function (evt) {
+      //  evt.preventDefault();
+      //  //target.clientWidth is total width.
+      //  // use to detect right edge
+      //  //relative to 0 is for left edge
+      //  console.log('touch start', evt.touches[0]);
+      //};
+      //
+      //var touchend = function (evt) {
+      //  evt.preventDefault();
+      //  console.log('touch end', evt.touches[0]);
+      //};
+
       return (
-        <div className="memory-view-container">
+        <div className="memory-view-container" /*onTouchStart={touchstart} onTouchEnd={touchend}*/>
           <div className= {containerClasses}>
             <header className="title-container">
               <span className="title display">{data.title}</span>
@@ -60,6 +73,9 @@ define([
               <span className="edit edit-icon glyphicon glyphicon-save" aria-hidden="true">
               </span>
             </div>
+            <div id="show-picture" ></div>
+            <input onChange={data.onChange} type="file" id="take-picture" accept="image/*" />
+
             <div className="tags-container" onKeyPress={data.createTag}>
               {tags}
             </div>

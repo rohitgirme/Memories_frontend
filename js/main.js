@@ -11,7 +11,7 @@ require([
     'jquery',
     'backbone',
     'underscore',
-    'jsx!views/ApplicationView',
+    'views/ApplicationView',
     'ApplicationRouter'
   ], function (
     $,
@@ -30,7 +30,7 @@ require([
     var appRouter = new AppRouter({
       appView: appView
     });
-    appRouter.start();
+    //appRouter.start();
   });
 
 });

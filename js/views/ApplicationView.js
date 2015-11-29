@@ -2,13 +2,13 @@
  * Created by rohitgirme on 10/4/15.
  */
 define([
-  'react',
   'views/core/BaseView',
-  'utils/Constants'
+  'utils/Constants',
+  'utils/AppUtil'
 ], function (
-  React,
   BaseView,
-  Constants) {
+  Constants,
+  AppUtil) {
 
   return BaseView.extend({
 
@@ -22,31 +22,61 @@ define([
     },
 
     start: function () {
-      this.render();
+      var _this = this;
+      setTimeout(function () {
+        _this.displayView(Constants.MAIN_VIEW);
+      }, 1500);
+      this.displayView(Constants.WELCOME_VIEW);
     },
 
-    showView: function (viewId) {
-      if (this.currentView) {
-        this.currentView.hide();
-      }
+    displayView: function (viewId, options) {
+      this._hideView(this.currentView);
 
       var viewToDisplay = this.views[viewId];
-      if (viewToDisplay) {
-        viewToDisplay.show();
-      } else {
+      if (!viewToDisplay) {
         switch (viewId) {
           case Constants.MAIN_VIEW:
-            this.loadView('jsx!components/RMainView', Constants.MAIN_VIEW);
+            this.loadView('views/MainView', viewId, options);
+            break;
+          case Constants.WELCOME_VIEW:
+            this.loadView('views/WelcomeScreenView', viewId, options);
             break;
         }
+      } else {
+        this._showView(viewToDisplay);
       }
     },
 
-    loadView: function (ViewClassModule, identifier) {
+    loadView: function (ViewClassModule, identifier, options) {
       var _this = this;
       require([ViewClassModule], function (ViewClass) {
-        React.render(<ViewClass></ViewClass>, _this.$el[0]);
+        var viewClass = new ViewClass({
+          options: options
+        });
+        _this.$el.append(viewClass.render().el);
+        _this.currentView = viewClass;
+        _this._showView(viewClass);
       });
+    },
+
+    _hideView: function (view) {
+      if (!view) {
+        AppUtil.warn('"view" is required parameter.');
+        return;
+      }
+
+      view.stopServices();
+      view.hide();
+    },
+
+    _showView: function (view) {
+      if (!view) {
+        AppUtil.warn('"view" is required parameter.');
+        return;
+      }
+
+      view.startServices();
+      view.show();
     }
   });
 });

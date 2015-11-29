@@ -26,6 +26,8 @@ define([
     },
 
     componentWillMount: function () {
+      React.initializeTouchEvents(true);
+
       if (!this.props.model) {
         this.setState({
           editMode: true
@@ -60,7 +62,8 @@ define([
         closePanelCallback: this.closePanelCallback,
         showPanel: this.state.showPanel,
         deleteCallback: this.deleteMemory,
-        createTag: this.createTag
+        createTag: this.createTag,
+        onChange: this.onChange
       });
 
     },
@@ -142,7 +145,31 @@ define([
           $('#app-container').addClass('is-visible');
         }
       }, 5);
+    },
+
+
+
+    onChange: function (event) {
+
+    // Get a reference to the taken picture or chosen file
+    var files = event.target.files,
+      file;
+    if (files && files.length > 0) {
+      file = files[0];
     }
+
+    var showPicture = document.querySelector("#show-picture");
+
+// Create ObjectURL
+    var imgURL = window.URL.createObjectURL(file);
+
+// Set img src to ObjectURL
+    showPicture.src = imgURL;
+
+// For performance reasons, revoke used ObjectURLs
+    window.URL.revokeObjectURL(imgURL);
+
+  }
 
   });
 });

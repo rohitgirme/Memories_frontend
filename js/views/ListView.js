@@ -3,30 +3,39 @@
  */
 define([
   'views/core/BaseView',
-  'components/RListView'
+  'utils/Constants',
+  'text!templates/ListItemTemplate.html'
 ], function (
   BaseView,
-  RListView) {
+  Constants,
+  listItemTemplate) {
+
+  'use strict';
+
+  var listViewTemplate =
+    '<div class="list-container">' +
+    '</div>';
+  
+  listItemTemplate = _.template(listItemTemplate);
 
   return BaseView.extend({
 
-    events: {
-      'reset model': 'render'
-    },
-    
-    initialize: function (options) {
-      this.model = options.model;
-    },
-
     render: function () {
-      React.render(
-        <RListView model={this.model.getItems()}></RListView>,
-        this.el[0]
-      );
+      this.$el.html(listViewTemplate);
+    },
+
+    updateView: function (model) {
+      var listItems = model.map(function (item) {
+        return listItemTemplate({
+          id: item.get(item.idAttribute),
+          title: item.get(Constants.TITLE),
+          date: item.get(Constants.DATE),
+          content: item.get(Constants.CONTENT),
+          image: item.get(Constants.PHOTOS)
+        });
+      });
+      this.$('.list-container').append(listItems);
     }
-
-
-    
 
   });
 
