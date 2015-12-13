@@ -26,11 +26,15 @@ define([
 
   return {
 
-    MAIN_VIEW: 'main_view',
-    WELCOME_VIEW: 'welcome_view',
-    HEADER_VIEW: 'header_view',
-    FOOTER_VIEW: 'footer_view',
-    LIST_VIEW: 'list_view',
+    MAIN_VIEW: 'mainView',
+    WELCOME_VIEW: 'welcomeView',
+    HEADER_VIEW: 'headerView',
+    FOOTER_VIEW: 'footerView',
+    LIST_VIEW: 'listView',
+    MEMORY_VIEW: 'memoryView',
+
+    UPDATE_MEMORY: 'updateMemory',
+    DELETE_MEMORY: 'deleteMemory',
 
     TITLE   : 'title',
     CONTENT : 'content',

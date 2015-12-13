@@ -2,8 +2,9 @@
  * Created by rohitgirme on 11/22/15.
  */
 define([
-  'classnames',
   'models/MemoriesCollection',
+  'models/MemoryModel',
+  'utils/AppEvents',
   'utils/Constants',
   'utils/SubViewHelper',
   'views/core/BaseView',
@@ -12,8 +13,9 @@ define([
   'views/FooterView',
   'text!templates/MainView.html'
 ], function (
-  classnames,
   MemoriesCollection,
+  MemoryModel,
+  AppEvents,
   Constants,
   SubViewHelper,
   BaseView,
@@ -37,6 +39,11 @@ define([
     initialize: function () {
       this.model = new MemoriesCollection();
       this.subviewHelper = new SubViewHelper();
+      this._listenToAppEvents();
+      _.bindAll(
+        this,
+        'handleMemoryClicked'
+      );
     },
 
     render: function () {
@@ -46,6 +53,7 @@ define([
     },
 
     startServices: function () {
+      this._listenToSubViews();
       this.delegateModelEvents();
       this.model.getTopMemories(5, {
         reset: true
@@ -53,7 +61,25 @@ define([
     },
 
     stopServices: function () {
+      this._stopListeningToSubViews();
       this.undelegateModelEvents();
+    },
+
+    _listenToAppEvents: function () {
+      AppEvents.listenToAppEvent(AppEvents.MEMORY_EVENT, _.bind(this.handleMemoryEvents, this));
+    },
+
+    _listenToSubViews: function () {
+      var listView = this.subviewHelper.getView(Constants.LIST_VIEW);
+      listView.on(listView.ITEM_CLICKED, this.handleMemoryClicked);
+
+      var footerView = this.subviewHelper.getView(Constants.FOOTER_VIEW);
+      footerView.on(footerView.CREATE_NEW, this.handleMemoryClicked);
+    },
+
+    _stopListeningToSubViews: function () {
+      var listView = this.subviewHelper.getView(Constants.LIST_VIEW);
+      listView.off();
     },
     
     _addListItems: function () {
@@ -76,16 +102,78 @@ define([
         })
       );
 
+      var listView = new ListView({
+        el   : this.$('.list-view-container'),
+        model: this.model
+      });
       this.subviewHelper.register(
         Constants.LIST_VIEW,
-        new ListView({
-          el   : this.$('.list-view-container'),
-          model: this.model
-        })
+        listView
       );
 
       this.subviewHelper.iterate('render');
       this.subviewHelper.iterate('startServices');
+    },
+
+    handleMemoryClicked: function (data) {
+      data = data || {};
+      this.$el.find('input').attr('tabindex', -1);
+      var model = this.model.get(data.itemId);
+      if (!model) {
+        model = new MemoryModel();
+        this.model.add(model, {silent: true});
+      }
+
+      AppEvents.triggerAppEvent(
+        AppEvents.DISPLAY_VIEW,
+        {
+          viewId: Constants.MEMORY_VIEW,
+          model : model
+        }
+      );
+      // fire event using AppEvents to display memoryview
+      // arguments are model, id
+      // add model to collection
+      // save id as state
+    },
+
+    handleMemoryEvents: function (evt, data) {
+      switch (data.type) {
+        case Constants.UPDATE_MEMORY:
+          this.handleMemoryUpdated(data);
+          break;
+        case Constants.DELETE_MEMORY:
+          this.handleMemoryDeleted(data);
+          break;
+      }
+    },
+
+    handleMemoryDeleted: function (data) {
+      this.$el.find('input').attr('tabindex', 1);
+      var model = this.model.get(data.itemId);
+      this.model.remove(model);
+      model.destroy();
+
+      AppEvents.triggerAppEvent(
+        AppEvents.DISPLAY_VIEW,
+        {
+          viewId: Constants.MAIN_VIEW
+        }
+      );
+    },
+
+    handleMemoryUpdated: function (data) {
+      this.$el.find('input').attr('tabindex', 1);
+      var dirtyModel = this.model.get(data.itemId);
+      this.model.add(dirtyModel, {merge: true});
+      dirtyModel.save();
+
+      AppEvents.triggerAppEvent(
+        AppEvents.DISPLAY_VIEW,
+        {
+          viewId: Constants.MAIN_VIEW
+        }
+      );
     }
 
   });

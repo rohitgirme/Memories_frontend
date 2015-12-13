@@ -1,0 +1,36 @@
+<header class="title-container">
+  <span class="title display"><%= title %></span>
+  <input class="title edit" value="<%= title %>" />
+</header>
+<span class="close-icon glyphicon glyphicon-remove" aria-hidden="true">
+  </span>
+<div class="content-container">
+    <span class="content display">
+      <%= content %>
+    </span>
+    <textarea class="content edit"
+              placeholder="<%= content ? '' : 'Once upon a time...'%>">
+      <%= content %>
+    </textarea>
+</div>
+<div class="photos"></div>
+<div class="actions"></div>
+<div class="edit-icon-container round-shape">
+    <span class="display edit-icon glyphicon glyphicon-pencil" aria-hidden="true">
+    </span>
+    <span class="edit save-icon glyphicon glyphicon-save" aria-hidden="true">
+    </span>
+</div>
+<span class="left-icon glyphicon glyphicon-chevron-left" aria-hidden="true">
+</span>
+<div id="show-picture" ></div>
+<!--<input onChange={data.onChange} type="file" id="take-picture" accept="image/*" />-->
+
+<div class="tags-container">
+  <% _.each(tags, function(tag) { %>
+  <div class="tag"><%= tag %></div>
+  <% }); %>
+  <div class="tag">
+    <input placeholder="tag" />
+  </div>
+</div>

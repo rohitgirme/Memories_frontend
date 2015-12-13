@@ -20,6 +20,12 @@ define([
 
   return BaseView.extend({
 
+    ITEM_CLICKED: 'itemClicked',
+
+    events: {
+      'click .list-container': 'onItemClick'
+    },
+
     render: function () {
       this.$el.html(listViewTemplate);
     },
@@ -35,6 +41,13 @@ define([
         });
       });
       this.$('.list-container').append(listItems);
+    },
+
+    onItemClick: function (evt) {
+      var item = $(evt.target).parents('[data-id]');
+      this.trigger(this.ITEM_CLICKED, {
+        itemId: item.attr('data-id')
+      });
     }
 
   });

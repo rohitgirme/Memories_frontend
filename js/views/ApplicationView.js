@@ -4,11 +4,13 @@
 define([
   'views/core/BaseView',
   'utils/Constants',
-  'utils/AppUtil'
+  'utils/AppUtil',
+  'utils/AppEvents'
 ], function (
   BaseView,
   Constants,
-  AppUtil) {
+  AppUtil,
+  AppEvents) {
 
   return BaseView.extend({
 
@@ -16,6 +18,8 @@ define([
 
     initialize: function () {
       this.views = {};
+      _.bindAll(this, 'handleDisplayEvent');
+      AppEvents.listenToAppEvent(AppEvents.DISPLAY_VIEW, this.handleDisplayEvent);
     },
 
     render: function () {
@@ -41,18 +45,23 @@ define([
           case Constants.WELCOME_VIEW:
             this.loadView('views/WelcomeScreenView', viewId, options);
             break;
+          case Constants.MEMORY_VIEW:
+            this.loadView('views/MemoryView', viewId, options);
+            break;
         }
       } else {
         this._showView(viewToDisplay);
       }
     },
 
+    handleDisplayEvent: function (evt, data) {
+      this.displayView(data.viewId, data);
+    },
+
     loadView: function (ViewClassModule, identifier, options) {
       var _this = this;
       require([ViewClassModule], function (ViewClass) {
-        var viewClass = new ViewClass({
-          options: options
-        });
+        var viewClass = new ViewClass(options);
         _this.$el.append(viewClass.render().el);
         _this.currentView = viewClass;
         _this._showView(viewClass);

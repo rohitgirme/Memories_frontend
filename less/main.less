@@ -85,6 +85,8 @@
     position: absolute;
     background-color: #9cb3a8;
     transform: translateX(100%);
+    height: 100%;
+    width: 100%;
 
     .app-create-new {
       float: right;
@@ -96,131 +98,127 @@
     transform: translateX(0);
   }
 
-  .memory-view-container {
-    visibility: hidden;
+  .panel-open {
+    position: absolute;
+    top: calc(50% - 5px);
+    right: 5px;
+    background-color: #ff0000;
+  }
+
+  .memory-view {
+    background-color: #243040;
+    color: red;
+    //visibility: hidden;
     transition: transform 0.3s ease-in, visibility 0.3s ease-in;
     transform: translateX(-100%);
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1;
+    width: 100%;
+    height: 100%;
 
-    .panel-open {
-      position: absolute;
-      top: calc(50% - 5px);
-      right: 5px;
-      background-color: #ff0000;
+    &.edit-mode {
+      .edit {
+        display: initial;
+      }
+      .display {
+        display: none;
+      }
     }
 
-    .memory-view {
-      background-color: #243040;
+    &.display-mode {
+      .edit {
+        display: none;
+      }
+      .display {
+        display: initial;
+        font-size: x-large;
+      }
+    }
+
+    .round-shape {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background-color: #009998;
+    }
+
+    .edit-icon-container {
+      text-align: center;
+      float: right;
+      cursor: pointer;
+      .edit-icon {
+        vertical-align: middle;
+      }
+    }
+
+    > .close-icon {
+      position: absolute;
+      top: 5px;
+      right: 10px;
       color: red;
+      cursor: pointer;
+    }
 
-      &.edit-mode {
-        .edit {
-          display: initial;
-        }
-        .display {
-          display: none;
-        }
-      }
+    .tags-container {
+      .tag {
+        border: 1px solid #ffffff;
+        box-shadow: inset -2px 2px 2px 0 #44A4C4,
+        inset 2px -2px 2px 0 #44A4C4;
+        margin: 0 5px;
+        padding: 2px 3px;
+        border-radius: 5px;
+        display: inline-block;
 
-      &.display-mode {
-        .edit {
-          display: none;
-        }
-        .display {
-          display: initial;
-          font-size: x-large;
-        }
-      }
-
-      .round-shape {
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        background-color: #009998;
-      }
-
-      .edit-icon-container {
-        text-align: center;
-        float: right;
-        cursor: pointer;
-        .edit-icon {
-          vertical-align: middle;
-        }
-      }
-
-      .close-icon {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        color: red;
-        cursor: pointer;
-      }
-
-      .tags-container {
-        .tag {
-          border: 1px solid #ffffff;
-          box-shadow: inset -2px 2px 2px 0 #44A4C4,
-          inset 2px -2px 2px 0 #44A4C4;
-          margin: 0 5px;
-          padding: 2px 3px;
-          border-radius: 5px;
-          display: inline-block;
-
-          input {
-            background: transparent;
-            border: none;
-            &:focus {
-              outline: none;
-            }
+        input {
+          background: transparent;
+          border: none;
+          &:focus {
+            outline: none;
           }
         }
       }
-
     }
 
-    .panel-view {
-      background: #bba;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 50px;
-      transition: all 0.2s ease-in;
+  }
 
-      .panel-content {
-        clear: both;
-      }
+  .panel-view {
+    background: #bba;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    transition: all 0.2s ease-in;
+    transform: translateX(100%);
+    visibility: hidden;
 
-      &.hidePanel {
-        transform: translateX(100%);
-        visibility: hidden;
-      }
+    .panel-content {
+      clear: both;
+    }
 
-      &.showPanel {
-        transform: translateX(0);
-        visibility: visible;
-      }
+    &.is-visible {
+      transform: translateX(0);
+      visibility: visible;
+    }
 
-      .close-icon {
-        padding: 5px;
-        float: right;
-      }
+    > .close-icon {
+      padding: 5px;
+      float: right;
+    }
 
-      ul {
-        list-style: none;
-        padding-left: 10px;
-      }
+    ul {
+      list-style: none;
+      padding-left: 10px;
     }
   }
 
-}
+  .memory-view.is-visible  {
+    visibility: visible;
+    transform: translateX(0);
+  }
 
-.memory-view-container.is-visible  {
-  visibility: visible;
-  transform: translateX(0);
 }
 
 .container-fluid {

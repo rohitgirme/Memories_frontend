@@ -12,6 +12,8 @@ define([
 
   return BaseView.extend({
 
+    CREATE_NEW: 'createNew',
+
     events: {
       'click .app-create-new': '_createNewMemory'
     },
@@ -21,7 +23,7 @@ define([
     },
 
     _createNewMemory: function () {
-
+      this.trigger(this.CREATE_NEW);
     }
 
   });
