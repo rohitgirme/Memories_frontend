@@ -41,7 +41,8 @@ define([
     PHOTOS  : 'photos',
     LOCATION:'location',
     TAGS    : 'tags',
-    DATE    : 'date',
+    CREATE_DATE : 'createDate',
+    UPDATE_DATE : 'updateDate',
 
     UNTITLED_TITLE: titleGenerator
 

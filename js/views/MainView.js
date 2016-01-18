@@ -120,7 +120,9 @@ define([
       this.$el.find('input').attr('tabindex', -1);
       var model = this.model.get(data.itemId);
       if (!model) {
+        var createDate = new Date();
         model = new MemoryModel();
+        model.set(Constants.CREATE_DATE, createDate.getTime());
         this.model.add(model, {silent: true});
       }
 
@@ -165,6 +167,10 @@ define([
     handleMemoryUpdated: function (data) {
       this.$el.find('input').attr('tabindex', 1);
       var dirtyModel = this.model.get(data.itemId);
+
+      var updateDate = new Date();
+      dirtyModel.set(Constants.UPDATE_DATE, updateDate.getTime());
+
       this.model.add(dirtyModel, {merge: true});
       dirtyModel.save();
 

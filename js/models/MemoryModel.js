@@ -3,12 +3,10 @@
  */
 define([
   'backbone',
-  'utils/URLConstants',
-  'utils/Constants'
+  'utils/URLConstants'
 ], function (
   Backbone,
-  URLConstants,
-  Constants) {
+  URLConstants) {
 
   return Backbone.Model.extend({
 
@@ -18,22 +16,10 @@ define([
       photos  : null,
       location: null,
       tags    : [],
-      date    : null
+      createDate    : null
     },
 
-    urlRoot: URLConstants.MEMORIES,
-
-    isNewMemory: function () {
-      var isNew = this.get(Constants.TITLE) === null;
-      isNew = isNew && this.get(Constants.CONTENT) === null;
-      isNew = isNew && this.get(Constants.PHOTOS) === null;
-      isNew = isNew && this.get(Constants.LOCATION) === null;
-      isNew = isNew && _.isEmpty(this.get(Constants.TAGS));
-      isNew = isNew && this.get(Constants.DATE) === null;
-
-      return isNew;
-    }
-
+    urlRoot: URLConstants.MEMORIES
   });
 
 });

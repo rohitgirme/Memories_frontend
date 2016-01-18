@@ -35,7 +35,7 @@ define([
         return listItemTemplate({
           id: item.get(item.idAttribute),
           title: item.get(Constants.TITLE),
-          date: item.get(Constants.DATE),
+          date: item.get(Constants.CREATE_DATE),
           content: item.get(Constants.CONTENT),
           image: item.get(Constants.PHOTOS)
         });

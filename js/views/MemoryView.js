@@ -44,21 +44,26 @@ define([
       this.panelView.on(this.panelView.DELETE, _.bind(this.deleteMemory, this));
     },
 
-    render: function () {
-      var isNew = this.model.isNewMemory();
-      var classes = classnames({
-        'display-mode': !isNew,
-        'edit-mode'   : isNew
-      });
+    render: function (options) {
+      var editMode = this.model.isNew();
+      if (options && options.editMode) {
+        editMode = true;
+      }
 
       this.$el.html(viewTemplate({
         title  : this.model.get(Constants.TITLE) || Constants.UNTITLED_TITLE(),
         content: this.model.get(Constants.CONTENT),
-        tags   : this.model.get(Constants.TAGS)
+        tags   : this.model.get(Constants.TAGS),
+        showInputTag: editMode
       }));
       this.$el.append(this.panelView.render().el);
 
-      this.$el.addClass(classes);
+      // add or remove class based on editMode.
+      if (editMode) {
+        this.$el.addClass('edit-mode');
+      } else {
+        this.$el.removeClass('edit-mode');
+      }
 
       return this;
     },
@@ -81,7 +86,9 @@ define([
     },
 
     editMemory: function () {
-      this.render();
+      this.render({
+        editMode: true
+      });
     },
 
     saveMemory: function (evt, silent) {
@@ -118,7 +125,7 @@ define([
         }
       );
     },
-    
+
     closeMemory: function () {
       this.saveMemory(null, true);
       var itemId = this.model.id || this.model.cid;

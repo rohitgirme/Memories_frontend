@@ -30,7 +30,9 @@
   <% _.each(tags, function(tag) { %>
   <div class="tag"><%= tag %></div>
   <% }); %>
+  <% if (showInputTag) { %>
   <div class="tag">
     <input placeholder="tag" />
   </div>
+  <% } %>
 </div>
