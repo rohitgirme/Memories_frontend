@@ -30,7 +30,7 @@ define([
 
   return BaseView.extend({
 
-    className: 'main-view',
+    className: 'main-view col-xs-12',
 
     modelEvents: {
       'model reset': '_addListItems'

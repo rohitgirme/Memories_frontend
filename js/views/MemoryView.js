@@ -28,7 +28,7 @@ define([
 
   return BaseView.extend({
 
-    className: 'memory-view',
+    className: 'memory-view col-xs-12',
 
     events: {
       'keypress .tags-container': '_createTag',
