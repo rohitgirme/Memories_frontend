@@ -45,9 +45,25 @@ define([
     },
 
     render: function (options) {
-      var editMode = this.model.isNew();
-      if (options && options.editMode) {
-        editMode = true;
+      var isNew = this.model.isNew(),
+          editMode = isNew,
+          _this = this,
+          location = this.model.get(Constants.LOCATION);
+
+      // Override with options if any are sent.
+      if (options && !_.isUndefined(options.editMode)) {
+        editMode = options.editMode;
+      }
+
+      if (isNew && !location && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          if (_this.model) {
+            _this.model.set(Constants.LOCATION, {
+              latitude : position.coords.latitude,
+              longitude: position.coords.longitude
+            });
+          }
+        });
       }
 
       this.$el.html(viewTemplate({
@@ -82,6 +98,7 @@ define([
             tagValue: tag
           })
         );
+        evt.stopPropagation();
       }
     },
 
@@ -98,15 +115,21 @@ define([
           tagContainer = domNode.find('.tags-container'),
           tags;
 
-      tags = _.map(tagContainer.children(':not(:last-child)'), function (tag) {
+      tags = _.map(tagContainer.children(), function (tag) {
         return $(tag).text();
       });
+
+      tags = _.compact(tags);
+
       this.model.set(Constants.TITLE, title.val() || title.text());
       this.model.set(Constants.CONTENT, content.val() || content.text());
       this.model.set(Constants.TAGS, tags);
 
+      // Switch to display mode after saving in edit mode.
       if (!silent) {
-        this.render();
+        this.render({
+          editMode: false
+        });
       }
     },
 
