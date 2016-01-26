@@ -11,8 +11,10 @@
     <div class="item-content"> 
       <%= content %> 
     </div> 
-  </div> 
-  <div class="item-image col-xs-2"> 
-    <%= image %> 
-  </div> 
+  </div>
+  <div class="item-image col-xs-2">
+    <% if (image) { %>
+    <img src="<%= image %>">
+    <% } %>
+  </div>
 </div>

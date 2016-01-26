@@ -26,6 +26,10 @@ define([
     '</div>'
   );
 
+  var imageTemplate = _.template(
+    '<img class="image" src="<%= imgPath %>">'
+  );
+
   return BaseView.extend({
 
     className: 'memory-view col-xs-12',
@@ -70,6 +74,7 @@ define([
         title  : this.model.get(Constants.TITLE) || Constants.UNTITLED_TITLE(),
         content: this.model.get(Constants.CONTENT),
         tags   : this.model.get(Constants.TAGS),
+        paths  : this.model.get(Constants.PHOTOS),
         showInputTag: editMode
       }));
       this.$el.append(this.panelView.render().el);

@@ -13,8 +13,11 @@
       <%= content %>
     </textarea>
 </div>
-<div class="photos"></div>
-<div class="actions"></div>
+<div class="photos-container">
+  <% _.each(paths, function(path) { %>
+  <img class="image" src="<%= path %>">
+  <% }); %>
+</div>
 <div class="edit-icon-container round-shape">
     <span class="display edit-icon glyphicon glyphicon-pencil" aria-hidden="true">
     </span>

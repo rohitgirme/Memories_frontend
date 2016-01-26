@@ -32,12 +32,13 @@ define([
 
     updateView: function (model) {
       var listItems = model.map(function (item) {
+        var photos = item.get(Constants.PHOTOS);
         return listItemTemplate({
           id: item.get(item.idAttribute),
           title: item.get(Constants.TITLE),
           date: item.get(Constants.CREATE_DATE),
           content: item.get(Constants.CONTENT),
-          image: item.get(Constants.PHOTOS)
+          image: _.isEmpty(photos) ? null : photos[0]
         });
       });
       this.$('.list-container').append(listItems);
