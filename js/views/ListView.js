@@ -41,7 +41,7 @@ define([
           image: _.isEmpty(photos) ? null : photos[0]
         });
       });
-      this.$('.list-container').append(listItems);
+      this.$('.list-container').html(listItems);
     },
 
     onItemClick: function (evt) {

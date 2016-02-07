@@ -2,16 +2,16 @@
  * Created by rohitgirme on 11/29/15.
  */
 define([
-  'classnames',
   'views/core/BaseView',
   'views/PanelView',
+  'models/MemoryModel',
   'utils/Constants',
   'utils/AppEvents',
   'text!templates/MemoryView.html'
 ], function (
-  classnames,
   BaseView,
   PanelView,
+  MemoryModel,
   Constants,
   AppEvents,
   viewTemplate) {
@@ -32,6 +32,8 @@ define([
 
   return BaseView.extend({
 
+    images: null,
+
     className: 'memory-view col-xs-12',
 
     events: {
@@ -39,13 +41,23 @@ define([
       'click .save-icon'        : 'saveMemory',
       'click .edit-icon'        : 'editMemory',
       'click .close-icon'       : 'closeMemory',
-      'click .left-icon'        : 'openPalette'
+      'click .left-icon'        : 'openPalette',
+      'click .upload'           : 'upload'
+    },
+
+    _getMemoryModel: function (options) {
+      var model = options.model;
+      if (!model) {
+        var createDate = new Date();
+        model = new MemoryModel();
+        model.set(Constants.CREATE_DATE, createDate.getTime());
+      }
+      return model;
     },
 
     initialize: function (options) {
-      this.model = options.model;
-      this.panelView = new PanelView();
-      this.panelView.on(this.panelView.DELETE, _.bind(this.deleteMemory, this));
+      this.images = [];
+      this.model = this._getMemoryModel(options);
     },
 
     render: function (options) {
@@ -77,7 +89,8 @@ define([
         paths  : this.model.get(Constants.PHOTOS),
         showInputTag: editMode
       }));
-      this.$el.append(this.panelView.render().el);
+
+      this._renderPanelView();
 
       // add or remove class based on editMode.
       if (editMode) {
@@ -89,22 +102,30 @@ define([
       return this;
     },
 
-    _createTag: function (evt) {
-      var target = $(evt.target);
+    show: function (options) {
+      if (options) {
+        this.model = this._getMemoryModel(options);
+      }
+      this.render();
+      BaseView.prototype.show.apply(this, arguments);
+    },
 
-      if (evt.which === 13) {
-        var tag = target.val(),
-            tags = this.model.get(Constants.TAGS);
+    displayImage: function (evt) {
+      var imageFile = evt.file,
+          reader = new FileReader(),
+          _this = this;
 
-        tags.push(tag);
-        target.val('');
-        $(evt.currentTarget).prepend(
-          tagTemplate({
-            tagValue: tag
+      this.images.push(imageFile);
+
+      reader.onload = function (e) {
+        _this.$('.scrolling-panel').append(
+          imageTemplate({
+            imgPath: e.target.result
           })
         );
-        evt.stopPropagation();
-      }
+      };
+
+      reader.readAsDataURL(imageFile);
     },
 
     editMemory: function () {
@@ -135,35 +156,70 @@ define([
         this.render({
           editMode: false
         });
+      } else {
+        var imageData = _.map(this.images, function (image) {
+          var formData = new FormData();
+          formData.append('image', image);
+          return formData;
+        });
+        if (imageData.length > 0) {
+          this.model.set(Constants.NEW_PHOTOS, imageData);
+        }
       }
     },
 
     openPalette: function () {
-      this.panelView.showPanel();
+      this.panelView.showPanel({
+        isNew: this.model.isNew()
+      });
     },
 
     deleteMemory: function (evt) {
       this.panelView.closePanel(evt);
-      var itemId = this.model.id || this.model.cid;
       AppEvents.triggerAppEvent(
         AppEvents.MEMORY_EVENT,
         {
           type  : Constants.DELETE_MEMORY,
-          itemId: itemId
+          model : this.model
         }
       );
     },
 
     closeMemory: function () {
       this.saveMemory(null, true);
-      var itemId = this.model.id || this.model.cid;
+      this.images = [];
       AppEvents.triggerAppEvent(
         AppEvents.MEMORY_EVENT,
         {
           type  : Constants.UPDATE_MEMORY,
-          itemId: itemId
+          model : this.model
         }
       );
+    },
+
+    _renderPanelView: function () {
+      this.panelView = new PanelView();
+      this.panelView.on(this.panelView.DELETE, _.bind(this.deleteMemory, this));
+      this.panelView.on(this.panelView.PHOTO, _.bind(this.displayImage, this));
+      this.$el.append(this.panelView.render().el);
+    },
+
+    _createTag: function (evt) {
+      var target = $(evt.target);
+
+      if (evt.which === 13) {
+        var tag = target.val(),
+          tags = this.model.get(Constants.TAGS);
+
+        tags.push(tag);
+        target.val('');
+        $(evt.currentTarget).prepend(
+          tagTemplate({
+            tagValue: tag
+          })
+        );
+        evt.stopPropagation();
+      }
     }
 
   });

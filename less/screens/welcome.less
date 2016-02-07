@@ -1,0 +1,81 @@
+#app-container {
+
+  .welcome-view.is-visible {
+    transform: translateY(0);
+  }
+
+  .welcome-view {
+    background: #26004d;
+    position: absolute;
+    transition: transform 0.3s ease-in;
+    transform: translateY(-100%);
+    z-index: 5;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .centering-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -120px 0 0 -125px
+    }
+
+    .app-icon {
+      position: relative;
+    }
+
+    .loader {
+      margin: 0;
+      position: absolute;
+      top: 200px;
+      left: 95px;
+
+      .rect {
+        background-color: #e8f7f0;
+      }
+    }
+
+    .right_1,
+    .right_2,
+    .left_1,
+    .left_2 {
+      border-radius: 50px;
+      position: absolute;
+    }
+
+    .left_1,
+    .left_2 {
+      width: 50px;
+      height: 200px;
+      background: #00545c;
+      transform: rotate(-25deg);
+    }
+
+    .left_1 {
+      left: 64px;
+    }
+
+    .left_2 {
+      left: 190px;
+    }
+
+    .right_1,
+    .right_2 {
+      position: absolute;
+      width: 50px;
+      height: 200px;
+      transform: rotate(25deg);
+      background: #f5fffa;
+      top: 1px;
+    }
+
+    .right_2 {
+      left: 127px;
+    }
+    .right_1 {
+      left: 0;
+    }
+  }
+}

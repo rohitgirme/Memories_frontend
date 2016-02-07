@@ -4,6 +4,8 @@
 define({
 
   MEMORIES: '/memories',
-  MEMORIES_TOP: _.template('/memories?action=top&number=<%= number %>')
+  MEMORIES_TOP: _.template('/memories?action=top&number=<%= number %>'),
+
+  UPLOAD_IMAGE: '/uploadImage'
 
 });

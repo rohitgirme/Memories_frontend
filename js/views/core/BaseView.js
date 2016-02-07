@@ -12,8 +12,8 @@ define([
 
     whitespaceRegex: /\s+/,
 
-    show: function (remove) {
-      if (remove) {
+    show: function (options) {
+      if (options && options.remove) {
         this.$el.show();
         return;
       }

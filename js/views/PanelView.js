@@ -17,8 +17,9 @@ define([
 
     events: {
       'click .delete-icon'  : 'onDelete',
-      'click .photo-icon'   : 'onAddPhoto',
-      'click .close-icon'   : 'closePanel'
+      'click .close-icon'   : 'closePanel',
+      'click .photo-target' : 'takePicture',
+      'change .take-picture': 'displayPicture'
     },
 
     render: function () {
@@ -26,7 +27,13 @@ define([
       return this;
     },
 
-    showPanel: function () {
+    showPanel: function (options) {
+      if (options && options.isNew) {
+        this.$('.isNew').hide();
+      } else {
+        this.$('.isNew').show();
+      }
+
       this.show();
     },
 
@@ -40,9 +47,17 @@ define([
       this.trigger(this.DELETE, evt);
     },
 
-    onAddPhoto: function (evt) {
+    takePicture: function (evt) {
       evt.stopPropagation();
-      this.trigger(this.PHOTO, evt);
+      this.$('.take-picture').click();
+    },
+
+    displayPicture: function (evt) {
+      evt.stopPropagation();
+      var imageFile = $(evt.currentTarget)[0].files[0];
+      this.trigger(this.PHOTO, {
+        file: imageFile
+      });
     }
   });
 

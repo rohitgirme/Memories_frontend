@@ -43,6 +43,7 @@ define([
     TAGS    : 'tags',
     CREATE_DATE : 'createDate',
     UPDATE_DATE : 'updateDate',
+    NEW_PHOTOS  : 'newPhotos',
 
     UNTITLED_TITLE: titleGenerator
 

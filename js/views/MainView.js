@@ -3,9 +3,9 @@
  */
 define([
   'models/MemoriesCollection',
-  'models/MemoryModel',
   'utils/AppEvents',
   'utils/Constants',
+  'utils/URLConstants',
   'utils/SubViewHelper',
   'views/core/BaseView',
   'views/HeaderView',
@@ -14,9 +14,9 @@ define([
   'text!templates/MainView.html'
 ], function (
   MemoriesCollection,
-  MemoryModel,
   AppEvents,
   Constants,
+  URLConstants,
   SubViewHelper,
   BaseView,
   HeaderView,
@@ -119,12 +119,6 @@ define([
       data = data || {};
       this.$el.find('input').attr('tabindex', -1);
       var model = this.model.get(data.itemId);
-      if (!model) {
-        var createDate = new Date();
-        model = new MemoryModel();
-        model.set(Constants.CREATE_DATE, createDate.getTime());
-        this.model.add(model, {silent: true});
-      }
 
       AppEvents.triggerAppEvent(
         AppEvents.DISPLAY_VIEW,
@@ -152,9 +146,8 @@ define([
 
     handleMemoryDeleted: function (data) {
       this.$el.find('input').attr('tabindex', 1);
-      var model = this.model.get(data.itemId);
-      this.model.remove(model);
-      model.destroy();
+      this.model.remove(data.model);
+      data.model.destroy();
 
       AppEvents.triggerAppEvent(
         AppEvents.DISPLAY_VIEW,
@@ -166,13 +159,42 @@ define([
 
     handleMemoryUpdated: function (data) {
       this.$el.find('input').attr('tabindex', 1);
-      var dirtyModel = this.model.get(data.itemId);
+      var dirtyModel = data.model;
 
       var updateDate = new Date();
       dirtyModel.set(Constants.UPDATE_DATE, updateDate.getTime());
 
+      var newPhotos = dirtyModel.get(Constants.NEW_PHOTOS);
+      if (newPhotos) {
+        dirtyModel.unset(Constants.NEW_PHOTOS, {silent: true});
+      }
+
       this.model.add(dirtyModel, {merge: true});
-      dirtyModel.save();
+      dirtyModel.save(null, {
+        success: function (model) {
+          var modelId = model.get(model.idAttribute);
+
+          _.each(newPhotos, function (image) {
+            $.ajax({
+              url: URLConstants.UPLOAD_IMAGE + '/' + modelId,
+              type: 'POST',
+              data: image,
+              cache: false,
+              processData: false, // Don't process the files
+              contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+              success: function (data, textStatus, jqXHR) {
+                console.log('success');
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.log('error');
+              }
+            });
+          });
+        },
+        error: function () {
+
+        }
+      });
 
       AppEvents.triggerAppEvent(
         AppEvents.DISPLAY_VIEW,

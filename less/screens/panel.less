@@ -1,0 +1,45 @@
+#app-container {
+  .panel-view {
+    background: #bba;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    transition: all 0.2s ease-in;
+    transform: translateX(100%);
+    visibility: hidden;
+
+    .panel-content {
+      clear: both;
+
+      .photo-icon {
+        position: relative;
+
+        .take-picture {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+        }
+      }
+    }
+
+    &.is-visible {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    > .close-icon {
+      padding: 5px;
+      float: right;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 10px;
+    }
+  }
+}

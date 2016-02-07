@@ -50,7 +50,7 @@ define([
             break;
         }
       } else {
-        this._showView(viewToDisplay);
+        this._showView(viewToDisplay, options);
       }
     },
 
@@ -64,7 +64,10 @@ define([
         var viewClass = new ViewClass(options);
         _this.$el.append(viewClass.render().el);
         _this.currentView = viewClass;
-        _this._showView(viewClass);
+        _this.views[identifier] = viewClass;
+
+        viewClass.startServices();
+        BaseView.prototype.show.apply(viewClass, arguments);
       });
     },
 
@@ -78,14 +81,15 @@ define([
       view.hide();
     },
 
-    _showView: function (view) {
+    _showView: function (view, options) {
       if (!view) {
         AppUtil.warn('"view" is required parameter.');
         return;
       }
 
+      this.currentView = view;
       view.startServices();
-      view.show();
+      view.show(options);
     }
   });
 });
