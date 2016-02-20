@@ -7,13 +7,10 @@
 </span>
 
 <div class="content-container">
-    <span class="content display">
-      <%= content %>
-    </span>
+    <span class="content display"><%= content %></span>
     <textarea class="content edit"
-              placeholder="<%= content ? '' : 'Once upon a time...'%>">
-      <%= content %>
-    </textarea>
+              placeholder="<%= content ? '' :
+              'Once upon a time...'%>"><%= content %></textarea>
 </div>
 
 <div class="photos-container">
@@ -35,7 +32,5 @@
   <% _.each(tags, function(tag) { %>
   <div class="tag"><%= tag %></div>
   <% }); %>
-  <% if (showInputTag) { %>
-  <div class="tag"><input placeholder="tag" /></div>
-  <% } %>
+  <div class="tag newTag"><input placeholder="tag" /></div>
 </div>

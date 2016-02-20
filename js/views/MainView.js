@@ -173,22 +173,19 @@ define([
       dirtyModel.save(null, {
         success: function (model) {
           var modelId = model.get(model.idAttribute);
-
-          _.each(newPhotos, function (image) {
-            $.ajax({
-              url: URLConstants.UPLOAD_IMAGE + '/' + modelId,
-              type: 'POST',
-              data: image,
-              cache: false,
-              processData: false, // Don't process the files
-              contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-              success: function (data, textStatus, jqXHR) {
-                console.log('success');
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.log('error');
-              }
-            });
+          $.ajax({
+            url: URLConstants.UPLOAD_IMAGE + '/' + modelId,
+            type: 'POST',
+            data: newPhotos,
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+            success: function (data, textStatus, jqXHR) {
+              console.log('success');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log('error');
+            }
           });
         },
         error: function () {

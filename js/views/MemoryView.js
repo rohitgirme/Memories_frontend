@@ -60,16 +60,11 @@ define([
       this.model = this._getMemoryModel(options);
     },
 
-    render: function (options) {
+    render: function () {
       var isNew = this.model.isNew(),
           editMode = isNew,
           _this = this,
           location = this.model.get(Constants.LOCATION);
-
-      // Override with options if any are sent.
-      if (options && !_.isUndefined(options.editMode)) {
-        editMode = options.editMode;
-      }
 
       if (isNew && !location && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -82,15 +77,31 @@ define([
         });
       }
 
+      this.updateView({
+        editMode: editMode
+      });
+
+      this._renderPanelView();
+
+      return this;
+    },
+
+    updateView: function (options) {
+      var editMode = false;
+
+      // Override with options if any are sent.
+      if (options && !_.isUndefined(options.editMode)) {
+        editMode = options.editMode;
+      }
+
+      // Redrawing everything to avoid complication of keeping track\state.
       this.$el.html(viewTemplate({
         title  : this.model.get(Constants.TITLE) || Constants.UNTITLED_TITLE(),
         content: this.model.get(Constants.CONTENT),
-        tags   : this.model.get(Constants.TAGS),
-        paths  : this.model.get(Constants.PHOTOS),
-        showInputTag: editMode
+        tags   : this.model.get(Constants.TAGS)
       }));
 
-      this._renderPanelView();
+      this._appendImages(this.model.get(Constants.PHOTOS));
 
       // add or remove class based on editMode.
       if (editMode) {
@@ -98,8 +109,6 @@ define([
       } else {
         this.$el.removeClass('edit-mode');
       }
-
-      return this;
     },
 
     show: function (options) {
@@ -110,7 +119,21 @@ define([
       BaseView.prototype.show.apply(this, arguments);
     },
 
-    displayImage: function (evt) {
+    _appendImages: function (images) {
+      var allImages = "";
+
+      if (_.isArray(images)) {
+        _.each(images, function (image) {
+          allImages += imageTemplate({
+            imgPath: image
+          })
+        });
+      }
+
+      this.$('.scrolling-panel').html(allImages);
+    },
+
+    displayUploadedImage: function (evt) {
       var imageFile = evt.file,
           reader = new FileReader(),
           _this = this;
@@ -129,7 +152,7 @@ define([
     },
 
     editMemory: function () {
-      this.render({
+      this.updateView({
         editMode: true
       });
     },
@@ -153,17 +176,16 @@ define([
 
       // Switch to display mode after saving in edit mode.
       if (!silent) {
-        this.render({
+        this.updateView({
           editMode: false
         });
       } else {
-        var imageData = _.map(this.images, function (image) {
-          var formData = new FormData();
-          formData.append('image', image);
-          return formData;
+        var formData = new FormData();
+        _.each(this.images, function (image) {
+          formData.append('images', image);
         });
-        if (imageData.length > 0) {
-          this.model.set(Constants.NEW_PHOTOS, imageData);
+        if (this.images.length > 0) {
+          this.model.set(Constants.NEW_PHOTOS, formData);
         }
       }
     },
@@ -200,7 +222,7 @@ define([
     _renderPanelView: function () {
       this.panelView = new PanelView();
       this.panelView.on(this.panelView.DELETE, _.bind(this.deleteMemory, this));
-      this.panelView.on(this.panelView.PHOTO, _.bind(this.displayImage, this));
+      this.panelView.on(this.panelView.PHOTO, _.bind(this.displayUploadedImage, this));
       this.$el.append(this.panelView.render().el);
     },
 

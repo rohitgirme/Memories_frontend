@@ -2,10 +2,12 @@
  * Created by rohitgirme on 10/18/15.
  */
 define([
+  'dateformat',
   'views/core/BaseView',
   'utils/Constants',
   'text!templates/ListItemTemplate.html'
 ], function (
+  dateformat,
   BaseView,
   Constants,
   listItemTemplate) {
@@ -32,11 +34,17 @@ define([
 
     updateView: function (model) {
       var listItems = model.map(function (item) {
-        var photos = item.get(Constants.PHOTOS);
+        var photos = item.get(Constants.PHOTOS),
+            formattedDate =
+              dateformat(
+                item.get(Constants.CREATE_DATE),
+                "ddd, mmm d, yyyy, h:MM tt"
+              );
+
         return listItemTemplate({
           id: item.get(item.idAttribute),
           title: item.get(Constants.TITLE),
-          date: item.get(Constants.CREATE_DATE),
+          date: formattedDate,
           content: item.get(Constants.CONTENT),
           image: _.isEmpty(photos) ? null : photos[0]
         });

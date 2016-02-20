@@ -81,6 +81,16 @@
       }
     }
 
+    .newTag {
+      visibility: hidden;
+    }
+
+    &.edit-mode {
+      .newTag {
+        visibility: visible;
+      }
+    }
+
     .photos-container {
       height: 105px;
       overflow-x: scroll;

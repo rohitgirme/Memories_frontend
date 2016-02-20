@@ -8,10 +8,9 @@
     "jquery": "^2.x.x",
     "backbone": "^1.x.x",
     "requirejs": "^2.x.x",
-    "react": "^0.x.x",
     "bootstrap": "^3.x.x",
     "spinkit": "^1.x.x",
-    "classnames": "~2.2.0"
+    "dateformat": "^1.x.x"
   },
   "devDependencies": {
     "grunt": "^0.x.x",

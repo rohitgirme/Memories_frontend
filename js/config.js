@@ -10,11 +10,7 @@ require.config({
     backbone  : '../node_modules/backbone/backbone',
     text      : '../node_modules/requirejs/text',
 
-    react     : '../node_modules/react/dist/react-with-addons',
-    JSXTransformer: '../node_modules/react/dist/JSXTransformer',
-    jsx       : '../node_modules/react/dist/jsx',
-
-    classnames  : '../node_modules/classnames/index'
+    dateformat : '../node_modules/dateformat/lib/dateformat'
   },
   shim: {
     'underscore': {
