@@ -5,6 +5,7 @@ define([
   'views/core/BaseView',
   'views/PanelView',
   'models/MemoryModel',
+  'models/editor/EditorFactory',
   'utils/Constants',
   'utils/AppEvents',
   'text!templates/MemoryView.html'
@@ -12,6 +13,7 @@ define([
   BaseView,
   PanelView,
   MemoryModel,
+  EditorFactory,
   Constants,
   AppEvents,
   viewTemplate) {
@@ -58,6 +60,7 @@ define([
     initialize: function (options) {
       this.images = [];
       this.model = this._getMemoryModel(options);
+      this.editor = EditorFactory.createEditor('text-editor');
     },
 
     render: function () {
@@ -84,6 +87,10 @@ define([
       this._renderPanelView();
 
       return this;
+    },
+
+    postRender: function () {
+      this.editor.render();
     },
 
     updateView: function (options) {

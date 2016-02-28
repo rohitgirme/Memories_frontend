@@ -12,6 +12,8 @@ define([
   AppUtil,
   AppEvents) {
 
+  'use strict';
+
   return BaseView.extend({
 
     currentView: null,
@@ -63,6 +65,7 @@ define([
       require([ViewClassModule], function (ViewClass) {
         var viewClass = new ViewClass(options);
         _this.$el.append(viewClass.render().el);
+        viewClass.postRender();
         _this.currentView = viewClass;
         _this.views[identifier] = viewClass;
 

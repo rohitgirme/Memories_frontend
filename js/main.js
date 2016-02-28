@@ -12,13 +12,15 @@ require([
     'backbone',
     'underscore',
     'views/ApplicationView',
-    'ApplicationRouter'
+    'ApplicationRouter',
+    'models/editor/EditorFactory'
   ], function (
     $,
-    _,
     Backbone,
+    _,
     AppView,
-    AppRouter) {
+    AppRouter,
+    EditorFactory) {
 
     'use strict';
 
@@ -26,6 +28,8 @@ require([
       el: $('#app-container')
     });
     appView.start();
+
+    EditorFactory.initialize();
 
     var appRouter = new AppRouter({
       appView: appView

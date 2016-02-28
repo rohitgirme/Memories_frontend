@@ -8,6 +8,8 @@ define([
   Backbone,
   AppUtil) {
 
+  'use strict';
+
   var BaseView = Backbone.View.extend({
 
     whitespaceRegex: /\s+/,
@@ -63,6 +65,10 @@ define([
     },
 
     stopServices: function () {
+
+    },
+
+    postRender: function () {
 
     }
 
