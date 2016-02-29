@@ -1,14 +1,29 @@
-<span class="close-icon glyphicon glyphicon-remove" aria-hidden="true">
-</span>
 <div class='panel-content'>
   <ul>
-    <li class="photo-icon">
+    <li class="photo-icon action-icon">
       <span class="photo-target glyphicon glyphicon-camera"></span>
       <input type="file" class="take-picture" accept="image/*"
              capture="camera"/>
     </li>
-    <li class="delete-icon isNew">
+    <li class="delete-icon action-icon"
+        data-action="<%= Constants.DELETE %>">
       <span class="glyphicon glyphicon-trash" aria-hidden="true">
+      </span>
+    </li>
+    <li class="undo-icon action-icon" data-action="<%= Constants.UNDO %>">
+      <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+      </span>
+    </li>
+    <li class="redo-icon action-icon" data-action="<%= Constants.REDO %>">
+      <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">
+      </span>
+    </li>
+    <li class="bold-icon action-icon" data-action="<%= Constants.BOLD %>">
+      <span class="glyphicon glyphicon-bold" aria-hidden="true">
+      </span>
+    </li>
+    <li class="italic-icon action-icon" data-action="<%= Constants.ITALIC %>">
+      <span class="glyphicon glyphicon-italic" aria-hidden="true">
       </span>
     </li>
   </ul>

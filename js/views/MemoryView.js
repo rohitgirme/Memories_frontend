@@ -63,26 +63,34 @@ define([
       this.editor = EditorFactory.createEditor('text-editor');
     },
 
+    _saveLocation: function () {
+      var _this = this;
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        if (_this.model) {
+          _this.model.set(Constants.LOCATION, {
+            latitude : position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        }
+      });
+    },
+
     render: function () {
       var isNew = this.model.isNew(),
           editMode = isNew,
-          _this = this,
           location = this.model.get(Constants.LOCATION);
-
-      if (isNew && !location && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          if (_this.model) {
-            _this.model.set(Constants.LOCATION, {
-              latitude : position.coords.latitude,
-              longitude: position.coords.longitude
-            });
-          }
-        });
-      }
 
       this.updateView({
         editMode: editMode
       });
+
+      if (isNew) {
+        this.$el.addClass('isNew');
+        if (!location && navigator.geolocation) {
+          this._saveLocation();
+        }
+      }
 
       this._renderPanelView();
 
@@ -197,14 +205,7 @@ define([
       }
     },
 
-    openPalette: function () {
-      this.panelView.showPanel({
-        isNew: this.model.isNew()
-      });
-    },
-
-    deleteMemory: function (evt) {
-      this.panelView.closePanel(evt);
+    deleteMemory: function () {
       AppEvents.triggerAppEvent(
         AppEvents.MEMORY_EVENT,
         {
@@ -226,16 +227,44 @@ define([
       );
     },
 
+    handleAction: function (evt) {
+      switch (evt.type) {
+        case Constants.DELETE:
+          this.deleteMemory();
+          break;
+        case Constants.UNDO:
+          this.editor.undo();
+          break;
+        case Constants.REDO:
+          this.editor.redo();
+          break;
+        case Constants.BOLD:
+          this.editor.makeBold();
+          break;
+        case Constants.ITALIC:
+          this.editor.makeItalic();
+          break;
+        case Constants.PHOTO:
+          this.displayUploadedImage();
+          break;
+      }
+    },
+
     _renderPanelView: function () {
-      this.panelView = new PanelView();
-      this.panelView.on(this.panelView.DELETE, _.bind(this.deleteMemory, this));
-      this.panelView.on(this.panelView.PHOTO, _.bind(this.displayUploadedImage, this));
-      this.$el.append(this.panelView.render().el);
+      this.panelView = new PanelView({
+        el: this.$('.panel-view-container')
+      });
+      this.panelView.on(this.panelView.ACTION, _.bind(this.handleAction, this));
+
+      this.panelView.render({
+        isNew: this.model.isNew()
+      });
     },
 
     _createTag: function (evt) {
       var target = $(evt.target);
 
+      // Enter creates the tag.
       if (evt.which === 13) {
         var tag = target.val(),
           tags = this.model.get(Constants.TAGS);

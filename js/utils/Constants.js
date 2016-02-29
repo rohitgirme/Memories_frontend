@@ -45,7 +45,15 @@ define([
     UPDATE_DATE : 'updateDate',
     NEW_PHOTOS  : 'newPhotos',
 
-    UNTITLED_TITLE: titleGenerator
+    UNTITLED_TITLE: titleGenerator,
+
+    // ACTIONS
+    PHOTO : 'photo',
+    DELETE: 'delete',
+    UNDO  : 'undo',
+    REDO  : 'redo',
+    BOLD  : 'bold',
+    ITALIC: 'italic'
 
   }
 

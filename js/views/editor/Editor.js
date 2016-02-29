@@ -24,5 +24,7 @@ define([
 
   });
 
-  return _.extend(Editor.prototype, TinyMCEEditorActions);
+  _.extend(Editor.prototype, TinyMCEEditorActions);
+
+  return Editor;
 });
