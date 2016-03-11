@@ -12,7 +12,7 @@ define([
     initialize: function () {
     },
 
-    createEditor: function (id) {
+    createEditor: function (id, container) {
       var editor = tinyMCE.EditorManager.createEditor(
         id,
         {
@@ -25,7 +25,8 @@ define([
         }
       );
       return new Editor({
-        editorInstance: editor
+        editorInstance: editor,
+        container     : container
       });
     }
 

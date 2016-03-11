@@ -2,8 +2,8 @@
  * Created by rohitgirme on 9/27/15.
  */
 require([
-  'config'
-], function () {
+  'config'],
+  function () {
 
   'use strict';
 

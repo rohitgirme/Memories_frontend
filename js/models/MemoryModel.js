@@ -3,9 +3,11 @@
  */
 define([
   'backbone',
+  'utils/Constants',
   'utils/URLConstants'
 ], function (
   Backbone,
+  Constants,
   URLConstants) {
 
   return Backbone.Model.extend({
@@ -19,7 +21,15 @@ define([
       createDate    : null
     },
 
-    urlRoot: URLConstants.MEMORIES
+    urlRoot: URLConstants.MEMORIES,
+
+    get: function (attr) {
+      var value = Backbone.Model.prototype.get.apply(this, arguments);
+      if (attr === Constants.CONTENT) {
+        return _.unescape(value);
+      }
+      return value;
+    }
   });
 
 });

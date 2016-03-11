@@ -85,10 +85,12 @@
     }
 
     .photos-container {
-      height: 105px;
-      overflow-x: scroll;
-      white-space: nowrap;
       margin: 0 20px;
+      .scroller-outer(@height: 105px, @scrollX: auto);
+
+      .scrolling-panel {
+        .scroller-inner();
+      }
 
       img {
         max-width: 100px;

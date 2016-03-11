@@ -1,23 +1,14 @@
-<header class="title-container">
-  <span class="title display"><%= title %></span>
-  <input class="title edit" value="<%= title %>" />
-</header>
+<header class="title-container"></header>
 
 <span class="close-icon glyphicon glyphicon-remove" aria-hidden="true">
 </span>
 
-<div class="content-container">
-    <span class="content display"><%= content %></span>
-    <textarea class="content edit"
-              placeholder="<%= content ? '' :
-              'Once upon a time...'%>"><%= content %></textarea>
+<div class="content editor-container">
+  <div id="text-editor" data-placeholder="Once upon a time..."></div>
 </div>
-
-<div id="text-editor"></div>
 
 <div class="photos-container">
   <div class="scrolling-panel">
-
   </div>
 </div>
 
@@ -27,13 +18,6 @@
     <span class="edit save-icon glyphicon glyphicon-save" aria-hidden="true">
     </span>
 </div>
-<span class="left-icon glyphicon glyphicon-chevron-left" aria-hidden="true">
-</span>
 
-<div class="tags-container">
-  <% _.each(tags, function(tag) { %>
-  <div class="tag"><%= tag %></div>
-  <% }); %>
-  <div class="tag newTag"><input placeholder="tag" /></div>
-</div>
+<div class="tags-container"></div>
 <div class="panel-view-container"></div>

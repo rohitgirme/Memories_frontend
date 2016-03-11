@@ -8,9 +8,11 @@
 
   .panel-view-container {
     background: #bba;
+    margin: 10px 0;
 
     .panel-content {
       clear: both;
+      .scroller-outer(@height:30px, @scrollX: auto);
 
       .photo-icon {
         position: relative;
@@ -28,6 +30,7 @@
       li.action-icon {
         display: inline-block;
         padding: 5px 15px;
+        cursor: pointer;
       }
     }
 
@@ -37,6 +40,10 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      .scroller-inner();
     }
   }
 }

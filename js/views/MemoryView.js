@@ -22,6 +22,18 @@ define([
 
   viewTemplate = _.template(viewTemplate);
 
+  var titleTemplate = _.template(
+    '<span class="title display"><%= title %></span>' +
+    '<input class="title edit" value="<%= title %>" />'
+  );
+
+  var tagsTemplate = _.template(
+    '<% _.each(tags, function(tag) { %>' +
+    '<div class="tag"><%= tag %></div>' +
+    '<% }); %>' +
+    '<div class="tag newTag"><input placeholder="tag" /></div>'
+  );
+
   var tagTemplate = _.template(
     '<div class="tag">' +
       '<%= tagValue %>' +
@@ -42,9 +54,7 @@ define([
       'keypress .tags-container': '_createTag',
       'click .save-icon'        : 'saveMemory',
       'click .edit-icon'        : 'editMemory',
-      'click .close-icon'       : 'closeMemory',
-      'click .left-icon'        : 'openPalette',
-      'click .upload'           : 'upload'
+      'click .close-icon'       : 'closeMemory'
     },
 
     _getMemoryModel: function (options) {
@@ -60,7 +70,10 @@ define([
     initialize: function (options) {
       this.images = [];
       this.model = this._getMemoryModel(options);
-      this.editor = EditorFactory.createEditor('text-editor');
+      this.editor = EditorFactory.createEditor(
+        'text-editor',
+        '.editor-container'
+      );
     },
 
     _saveLocation: function () {
@@ -76,10 +89,15 @@ define([
       });
     },
 
-    render: function () {
+    render: function (updateView) {
       var isNew = this.model.isNew(),
           editMode = isNew,
           location = this.model.get(Constants.LOCATION);
+
+      if (!updateView) {
+        this.$el.html(viewTemplate);
+        this._renderPanelView();
+      }
 
       this.updateView({
         editMode: editMode
@@ -90,15 +108,21 @@ define([
         if (!location && navigator.geolocation) {
           this._saveLocation();
         }
+      } else {
+        this.$el.removeClass('isNew');
       }
-
-      this._renderPanelView();
 
       return this;
     },
 
     postRender: function () {
       this.editor.render();
+      this.updateEditor();
+    },
+
+    updateEditor: function () {
+      this.editor.setContent(this.model.get(Constants.CONTENT));
+      this.editor.setReadOnly(this.editMode);
     },
 
     updateView: function (options) {
@@ -107,22 +131,32 @@ define([
       // Override with options if any are sent.
       if (options && !_.isUndefined(options.editMode)) {
         editMode = options.editMode;
+        this.editMode = editMode;
       }
 
-      // Redrawing everything to avoid complication of keeping track\state.
-      this.$el.html(viewTemplate({
-        title  : this.model.get(Constants.TITLE) || Constants.UNTITLED_TITLE(),
-        content: this.model.get(Constants.CONTENT),
-        tags   : this.model.get(Constants.TAGS)
+      this.$('.title-container').html(titleTemplate({
+        title: this.model.get(Constants.TITLE) || Constants.UNTITLED_TITLE()
       }));
+
+      this.$('.tags-container').html(tagsTemplate({
+        tags: this.model.get(Constants.TAGS)
+      }));
+
+      this.updateEditor();
 
       this._appendImages(this.model.get(Constants.PHOTOS));
 
       // add or remove class based on editMode.
       if (editMode) {
         this.$el.addClass('edit-mode');
+        this.panelView.show({
+          remove: true
+        });
       } else {
         this.$el.removeClass('edit-mode');
+        this.panelView.hide({
+          remove: true
+        });
       }
     },
 
@@ -130,7 +164,8 @@ define([
       if (options) {
         this.model = this._getMemoryModel(options);
       }
-      this.render();
+      this.render(true);
+
       BaseView.prototype.show.apply(this, arguments);
     },
 
@@ -172,10 +207,19 @@ define([
       });
     },
 
+    _gatherImages: function () {
+      var formData = new FormData();
+      _.each(this.images, function (image) {
+        formData.append('images', image);
+      });
+      if (this.images.length > 0) {
+        this.model.set(Constants.NEW_PHOTOS, formData);
+      }
+    },
+
     saveMemory: function (evt, silent) {
       var domNode = this.$el,
           title = domNode.find('.title:visible'),
-          content = domNode.find('.content:visible'),
           tagContainer = domNode.find('.tags-container'),
           tags;
 
@@ -186,7 +230,7 @@ define([
       tags = _.compact(tags);
 
       this.model.set(Constants.TITLE, title.val() || title.text());
-      this.model.set(Constants.CONTENT, content.val() || content.text());
+      this.model.set(Constants.CONTENT, this.editor.getContent());
       this.model.set(Constants.TAGS, tags);
 
       // Switch to display mode after saving in edit mode.
@@ -195,13 +239,7 @@ define([
           editMode: false
         });
       } else {
-        var formData = new FormData();
-        _.each(this.images, function (image) {
-          formData.append('images', image);
-        });
-        if (this.images.length > 0) {
-          this.model.set(Constants.NEW_PHOTOS, formData);
-        }
+        this._gatherImages();
       }
     },
 

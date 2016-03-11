@@ -23,8 +23,8 @@ define([
       this.$el.addClass('is-visible');
     },
 
-    hide: function (remove) {
-      if (remove) {
+    hide: function (options) {
+      if (options && options.remove) {
         this.$el.hide();
         return;
       }
