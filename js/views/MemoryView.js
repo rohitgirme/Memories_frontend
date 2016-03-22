@@ -283,7 +283,7 @@ define([
           this.editor.makeItalic();
           break;
         case Constants.PHOTO:
-          this.displayUploadedImage();
+          this.displayUploadedImage(evt);
           break;
       }
     },

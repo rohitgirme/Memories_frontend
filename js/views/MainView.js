@@ -127,10 +127,6 @@ define([
           model : model
         }
       );
-      // fire event using AppEvents to display memoryview
-      // arguments are model, id
-      // add model to collection
-      // save id as state
     },
 
     handleMemoryEvents: function (evt, data) {
@@ -158,6 +154,7 @@ define([
     },
 
     handleMemoryUpdated: function (data) {
+      var _this = this;
       this.$el.find('input').attr('tabindex', 1);
       var dirtyModel = data.model;
 
@@ -172,21 +169,25 @@ define([
       this.model.add(dirtyModel, {merge: true});
       dirtyModel.save(null, {
         success: function (model) {
-          var modelId = model.get(model.idAttribute);
-          $.ajax({
-            url: URLConstants.UPLOAD_IMAGE + '/' + modelId,
-            type: 'POST',
-            data: newPhotos,
-            cache: false,
-            processData: false, // Don't process the files
-            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-            success: function (data, textStatus, jqXHR) {
-              console.log('success');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              console.log('error');
-            }
-          });
+          if (newPhotos) {
+            var modelId = model.get(model.idAttribute);
+            $.ajax({
+              url: URLConstants.UPLOAD_IMAGE + '/' + modelId,
+              type: 'POST',
+              data: newPhotos,
+              cache: false,
+              processData: false, // Don't process the files
+              contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+              success: function (data, textStatus, jqXHR) {
+                _this.model.getTopMemories(5, {
+                  reset: true
+                });
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.log('error');
+              }
+            });
+          }
         },
         error: function () {
 
