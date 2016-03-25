@@ -43,7 +43,7 @@ define([
     setContent: function (content) {
       var _this = this;
 
-      if (_this.editor.getElement() && content) {
+      if (_this.editor.getElement()) {
         _this.editor.setContent(_.unescape(content));
       }
     },

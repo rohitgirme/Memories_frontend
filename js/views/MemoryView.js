@@ -121,7 +121,7 @@ define([
     },
 
     updateEditor: function () {
-      this.editor.setContent(this.model.get(Constants.CONTENT));
+      this.editor.setContent(this.model.get(Constants.CONTENT) || "");
       this.editor.setReadOnly(this.editMode);
     },
 
@@ -305,7 +305,7 @@ define([
       // Enter creates the tag.
       if (evt.which === 13) {
         var tag = target.val(),
-          tags = this.model.get(Constants.TAGS);
+            tags = this.model.get(Constants.TAGS);
 
         tags.push(tag);
         target.val('');

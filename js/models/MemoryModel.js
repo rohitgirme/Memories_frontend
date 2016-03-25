@@ -17,11 +17,15 @@ define([
       content : null,
       photos  : null,
       location: null,
-      tags    : [],
+      tags    : null,
       createDate    : null
     },
 
     urlRoot: URLConstants.MEMORIES,
+
+    initialize: function () {
+      this.set(Constants.TAGS, []);
+    },
 
     get: function (attr) {
       var value = Backbone.Model.prototype.get.apply(this, arguments);
