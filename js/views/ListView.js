@@ -32,14 +32,14 @@ define([
       this.$el.html(listViewTemplate);
     },
 
-    updateView: function (model) {
+    getListItems: function (model) {
       var listItems = model.map(function (item) {
         var photos = item.get(Constants.PHOTOS),
-            formattedDate =
-              dateformat(
-                item.get(Constants.CREATE_DATE),
-                "ddd, mmm d, yyyy, h:MM tt"
-              );
+          formattedDate =
+            dateformat(
+              item.get(Constants.CREATE_DATE),
+              "ddd, mmm d, yyyy, h:MM tt"
+            );
 
         return listItemTemplate({
           id: item.get(item.idAttribute),
@@ -49,6 +49,11 @@ define([
           image: _.isEmpty(photos) ? null : photos[0]
         });
       });
+      return listItems;
+    },
+
+    updateView: function (model) {
+      var listItems = this.getListItems(model);
       this.$('.list-container').html(listItems);
     },
 

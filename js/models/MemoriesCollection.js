@@ -14,8 +14,6 @@ define([
 
       name: 'MemoriesCollection',
 
-      url: URLConstants.MEMORIES,
-
       model: MemoryModel,
 
       mode: null,
@@ -25,20 +23,18 @@ define([
       getTopMemories: function (number, options) {
         this.mode = 'top';
         this.number = number;
-        this.fetch(options, this.getURL());
+        this.fetch(options);
+        this.mode = null;
       },
 
-      fetch: function (options, url) {
-        this.url = url || this.url;
-        Backbone.Collection.prototype.fetch.call(this, options);
-      },
-
-      getURL: function () {
+      url: function () {
         switch (this.mode) {
           case 'top':
             return URLConstants.MEMORIES_TOP({
               number: this.number
             });
+          default :
+            return URLConstants.MEMORIES;
         }
       },
 

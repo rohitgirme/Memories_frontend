@@ -2,25 +2,29 @@
  * Created by rohitgirme on 11/22/15.
  */
 define([
+  'toastr',
   'models/MemoriesCollection',
+  'models/PagingMixin',
   'utils/AppEvents',
   'utils/Constants',
   'utils/URLConstants',
   'utils/SubViewHelper',
   'views/core/BaseView',
   'views/HeaderView',
-  'views/ListView',
+  'views/InfiniteListView',
   'views/FooterView',
   'text!templates/MainView.html'
 ], function (
+  Notifications,
   MemoriesCollection,
+  PagingMixin,
   AppEvents,
   Constants,
   URLConstants,
   SubViewHelper,
   BaseView,
   HeaderView,
-  ListView,
+  InfiniteListView,
   FooterView,
   viewTemplate) {
 
@@ -32,12 +36,9 @@ define([
 
     className: 'main-view col-xs-12',
 
-    modelEvents: {
-      'model reset': '_addListItems'
-    },
-
     initialize: function () {
       this.model = new MemoriesCollection();
+      _.extend(this.model, PagingMixin);
       this.subviewHelper = new SubViewHelper();
       this._listenToAppEvents();
       _.bindAll(
@@ -53,10 +54,17 @@ define([
     },
 
     startServices: function () {
+      var _this = this;
       this._listenToSubViews();
       this.delegateModelEvents();
       this.model.getTopMemories(5, {
-        reset: true
+        reset: true,
+        success: function () {
+          _this._addListItems();
+        },
+        error: function () {
+          Notifications.error('Looks like the internet broke...');
+        }
       });
     },
 
@@ -102,7 +110,7 @@ define([
         })
       );
 
-      var listView = new ListView({
+      var listView = new InfiniteListView({
         el   : this.$('.list-view-container'),
         model: this.model
       });

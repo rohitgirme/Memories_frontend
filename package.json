@@ -10,7 +10,8 @@
     "requirejs": "^2.x.x",
     "bootstrap": "^3.x.x",
     "spinkit": "^1.x.x",
-    "dateformat": "^1.x.x"
+    "dateformat": "^1.x.x",
+    "toastr": "^2.1.2"
   },
   "devDependencies": {
     "grunt": "^0.x.x",

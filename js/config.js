@@ -10,7 +10,8 @@ require.config({
     backbone  : '../node_modules/backbone/backbone',
     text      : '../node_modules/requirejs/text',
 
-    dateformat : '../node_modules/dateformat/lib/dateformat'
+    dateformat : '../node_modules/dateformat/lib/dateformat',
+    toastr     : '../node_modules/toastr/build/toastr.min'
   },
   shim: {
     'underscore': {
