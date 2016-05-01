@@ -17,6 +17,9 @@ define([
   var listViewTemplate =
     '<div class="list-container">' +
     '</div>';
+
+  var batchContainerTmpl =
+    '<div class="batch-container container-fluid"></div>';
   
   listItemTemplate = _.template(listItemTemplate);
 
@@ -53,8 +56,11 @@ define([
     },
 
     updateView: function (model) {
+      var batchContainer = $(batchContainerTmpl);
       var listItems = this.getListItems(model);
-      this.$('.list-container').html(listItems);
+
+      batchContainer.append(listItems);
+      this.$('.list-container').html(batchContainer);
     },
 
     onItemClick: function (evt) {

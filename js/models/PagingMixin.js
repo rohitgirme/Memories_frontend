@@ -3,22 +3,18 @@
  */
 define([
   'backbone',
-  'toastr',
-  'utils/URLConstants'
+  'toastr'
 ], function (
   Backbone,
-  Notifications,
-  URLConstants) {
+  Notifications) {
 
   'use strict';
 
-  var EVENTS = {
-    NEW_PAGE: 'new_page'
-  };
-
   return {
 
-    count: 0,
+    upper: 0,
+
+    lower: 0,
 
     limit: 10,
 
@@ -26,8 +22,27 @@ define([
       this.limit = limit;
     },
 
+    setRange: function (options) {
+      if (!options) {
+        return;
+      }
+      this.upper = _.isNumber(options.upper) ? options.upper : this.upper;
+      this.lower = _.isNumber(options.lower) ? options.lower : this.lower;
+    },
+
+    reset: function () {
+      this.limit = 10;
+      this.upper = 0;
+      this.lower = 0;
+    },
+
+    getTopItems: function (number, options) {
+      this.setLimit(number);
+      this.getNext(options);
+    },
+
     getNextURL: function () {
-      var url = this.url() + '?count=' + this.count +
+      var url = _.result(this, 'url') + '?skip=' + this.upper +
         '&limit=' + this.limit;
       return url;
     },
@@ -38,11 +53,7 @@ define([
       this.fetch({
         url: this.getNextURL(),
         success: function (model) {
-          _this.count += _this.limit;
-          _this.trigger(EVENTS.NEW_PAGE, {
-            count: _this.count,
-            limit: _this.limit
-          });
+          _this.upper += _this.limit;
           if (options && _.isFunction(options.success)) {
             options.success(model);
           }
@@ -56,8 +67,31 @@ define([
       });
     },
 
-    getPrevious: function () {
+    getPrevURL: function () {
+      var count = Math.max(0, this.lower - this.limit);
+      var url = _.result(this, 'url') + '?skip=' + count +
+        '&limit=' + this.limit;
+      return url;
+    },
 
+    getPrevious: function (options) {
+      var _this = this;
+
+      this.fetch({
+        url: this.getPrevURL(),
+        success: function (model) {
+          _this.lower += _this.limit;
+          if (options && _.isFunction(options.success)) {
+            options.success(model);
+          }
+        },
+        error: function () {
+          Notifications.error('Looks like the internet broke...');
+          if (options && _.isFunction(options.error)) {
+            options.error();
+          }
+        }
+      });
     }
 
   };

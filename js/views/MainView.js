@@ -57,7 +57,9 @@ define([
       var _this = this;
       this._listenToSubViews();
       this.delegateModelEvents();
-      this.model.getTopMemories(5, {
+
+      this.model.reset();
+      this.model.getTopItems(10, {
         reset: true,
         success: function () {
           _this._addListItems();
