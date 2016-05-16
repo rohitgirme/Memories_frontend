@@ -28,10 +28,6 @@ define([
     },
 
     start: function () {
-      var _this = this;
-      setTimeout(function () {
-        _this.displayView(Constants.MAIN_VIEW);
-      }, 1500);
       this.displayView(Constants.WELCOME_VIEW);
     },
 

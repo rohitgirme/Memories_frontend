@@ -15,6 +15,44 @@
     right: 0;
     bottom: 0;
 
+    #gSignInWrapper {
+      position: absolute;
+      bottom: 10px;
+      left: 25px;
+      display: none;
+
+      #customBtn {
+        display: inline-block;
+        background: white;
+        color: #444;
+        width: 180px;
+        border-radius: 5px;
+        border: thin solid #888;
+        box-shadow: 1px 1px 1px grey;
+        white-space: nowrap;
+      }
+      #customBtn:hover {
+        cursor: pointer;
+      }
+      span.icon {
+        background: url('/assets/images/btn_google_dark_normal_ios.svg') transparent 5px 50% no-repeat;
+        display: inline-block;
+        vertical-align: middle;
+        width: 50px;
+        height: 42px;
+      }
+      span.buttonText {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 25px;
+        padding-right: 25px;
+        font-size: 14px;
+        font-weight: bold;
+        /* Use the Roboto font that is loaded in the <head> */
+        font-family: 'Roboto', sans-serif;
+      }
+    }
+
     .centering-wrapper {
       position: absolute;
       top: 50%;

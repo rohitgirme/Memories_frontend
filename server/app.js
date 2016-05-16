@@ -19,6 +19,10 @@ app.use(lessMiddleware('/less', {
 // Used to server static files.
 app.use(express.static(fileRoot));
 
+app.get('/', function (req, res) {
+  res.sendfile(path.join(fileRoot, 'index_dev.html'));
+});
+
 // This is MOCK data.
 //app.get('/memories', function (req, res) {
 //  console.log('memories', req.query);
